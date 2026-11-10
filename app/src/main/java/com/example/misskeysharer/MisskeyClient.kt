@@ -121,7 +121,7 @@ object MisskeyClient {
         }
     }
 
-    private fun parseApiError(body: String, code: Int): String = try {
+    internal fun parseApiError(body: String, code: Int): String = try {
         val error = JSONObject(body).optJSONObject("error")
         error?.optString("message")?.takeIf { it.isNotEmpty() } ?: "HTTP $code"
     } catch (e: Exception) {
