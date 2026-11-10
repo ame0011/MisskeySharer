@@ -1,4 +1,4 @@
-package com.example.misskeysharer
+package com.amesingularity.misskeysharer
 
 import android.content.Context
 import android.content.SharedPreferences

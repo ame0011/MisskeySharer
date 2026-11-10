@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.misskeysharer"
+    namespace = "com.amesingularity.misskeysharer"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.example.misskeysharer"
+        applicationId = "com.amesingularity.misskeysharer"
         minSdk = 26
         targetSdk = 35
         versionCode = 1

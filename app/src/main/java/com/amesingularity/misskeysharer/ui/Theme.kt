@@ -1,4 +1,4 @@
-package com.example.misskeysharer.ui
+package com.amesingularity.misskeysharer.ui
 import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme

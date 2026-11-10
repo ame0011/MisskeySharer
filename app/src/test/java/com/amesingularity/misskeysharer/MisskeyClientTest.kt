@@ -1,4 +1,4 @@
-package com.example.misskeysharer
+package com.amesingularity.misskeysharer
 
 import org.junit.Test
 import org.junit.Assert.assertEquals

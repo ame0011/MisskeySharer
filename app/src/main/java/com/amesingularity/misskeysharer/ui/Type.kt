@@ -1,4 +1,4 @@
-package com.example.misskeysharer.ui
+package com.amesingularity.misskeysharer.ui
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

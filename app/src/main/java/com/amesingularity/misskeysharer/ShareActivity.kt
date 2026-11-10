@@ -1,4 +1,4 @@
-package com.example.misskeysharer
+package com.amesingularity.misskeysharer
 
 import android.content.Intent
 import android.os.Bundle
@@ -41,7 +41,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.example.misskeysharer.ui.AppTheme
+import com.amesingularity.misskeysharer.ui.AppTheme
 import kotlinx.coroutines.launch
 
 /**

@@ -1,4 +1,4 @@
-package com.example.misskeysharer
+package com.amesingularity.misskeysharer
 
 import android.content.Intent
 import android.net.Uri

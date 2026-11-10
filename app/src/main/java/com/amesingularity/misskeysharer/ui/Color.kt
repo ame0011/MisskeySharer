@@ -1,4 +1,4 @@
-package com.example.misskeysharer.ui
+package com.amesingularity.misskeysharer.ui
 import androidx.compose.ui.graphics.Color
 
 val primaryLight = Color(0xFF526526)
