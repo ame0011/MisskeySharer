@@ -28,9 +28,11 @@ class MiAuthCallbackActivity : ComponentActivity() {
         val data: Uri? = intent?.data
         val session = data?.getQueryParameter("session")
         val instanceFromUrl = data?.getQueryParameter("instance")
+        // pending（本アプリが生成したセッションに紐づくinstance）を優先し、
+        // 改変されたディープリンクのinstanceパラメータに過信しない
         val pending = Prefs.pendingAuth(this)
         val instance = Prefs.normalizeInstanceUrl(
-            instanceFromUrl ?: pending?.first.orEmpty()
+            pending?.first ?: instanceFromUrl.orEmpty()
         )
 
         if (session.isNullOrEmpty() || instance.isEmpty()) {
