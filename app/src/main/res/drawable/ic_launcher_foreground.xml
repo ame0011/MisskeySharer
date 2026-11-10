@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- 白い吹き出し -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M34,36 h40 a9,9 0 0 1 9,9 v18 a9,9 0 0 1 -9,9 h-24 l-11,9 v-9 h-5 a9,9 0 0 1 -9,-9 v-18 a9,9 0 0 1 9,-9 z" />
+    <!-- 吹き出し内のテキスト風ライン -->
+    <path
+        android:fillColor="#86B300"
+        android:pathData="M40,50 h28 v4 h-28 z M40,58 h20 v4 h-20 z" />
+</vector>
