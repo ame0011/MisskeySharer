@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -84,7 +83,6 @@ fun ShareScreen(initialText: String, onFinish: () -> Unit) {
     var visibility by rememberSaveable { mutableStateOf(Prefs.defaultVisibility(context)) }
     var localOnly by rememberSaveable { mutableStateOf(Prefs.defaultLocalOnly(context)) }
     var posting by remember { mutableStateOf(false) }
-    var errorMessage by remember { mutableStateOf<String?>(null) }
 
     val acc = account
     if (acc == null) {
@@ -100,7 +98,6 @@ fun ShareScreen(initialText: String, onFinish: () -> Unit) {
 
     fun post() {
         posting = true
-        errorMessage = null
         scope.launch {
             try {
                 MisskeyClient.createNote(
@@ -114,7 +111,8 @@ fun ShareScreen(initialText: String, onFinish: () -> Unit) {
                 onFinish()
             } catch (e: Exception) {
                 posting = false
-                errorMessage = e.message ?: "投稿に失敗しました"
+                // MainActivity と同じく、エラーも Toast で表示する（通知手段を統一）
+                Toast.makeText(context, "投稿に失敗しました: ${e.message ?: "エラー"}", Toast.LENGTH_LONG).show()
             }
         }
     }
@@ -211,19 +209,6 @@ fun ShareScreen(initialText: String, onFinish: () -> Unit) {
                 }
             }
         }
-    }
-
-    errorMessage?.let { message ->
-        AlertDialog(
-            onDismissRequest = { errorMessage = null },
-            title = { Text("投稿エラー") },
-            text = { Text(message) },
-            confirmButton = {
-                TextButton(onClick = { errorMessage = null }) {
-                    Text("OK")
-                }
-            }
-        )
     }
 }
 
