@@ -5,9 +5,10 @@ Kotlin + Jetpack Composeで実装しています。
 
 ## 機能
 
-- 他アプリの共有シート → 「Misskeyに投稿」→ **確認画面** → ノート投稿
+- 他アプリの共有シート → 「Misskeyに投稿」→ 確認画面 → ノート投稿
 - MiAuthによるアカウント連携（初回のみブラウザで認証、以降は自動）
-- 投稿前に内容を編集可能・文字数表示
+- 投稿前に内容を編集可能
+- 文字数表示
 - 公開範囲（公開 / ホーム / フォロワー）と「ローカルのみ」を投稿ごとに選択可能
 - 設定画面でデフォルトの公開範囲を保存
 - ブラウザ共有時は「タイトル + URL」を自動整形して受け取り
@@ -22,16 +23,29 @@ Kotlin + Jetpack Composeで実装しています。
 
 ## ビルド手順
 
+### Android Studio
+
 1. Android Studioで `File > Open` からこのフォルダ（`MisskeySharer`）を開きます。
 2. Gradle Syncが完了するまで待ちます（初回はGradleと依存関係をダウンロードします）。
 3. 実機またはエミュレータを選んで `Run` でインストールします。
 
-コマンドラインでビルドする場合:
+### コマンドライン
+
+#### デバッグビルド
 
 ```bash
 ./gradlew assembleDebug
-# 生成物: app/build/outputs/apk/debug/app-debug.apk
 ```
+
+`app/build/outputs/apk/debug/app-debug.apk` に生成されます。
+
+#### リリースビルド
+
+```bash
+./gradlew assembleRelease
+```
+
+`app/build/outputs/apk/release/app-release-unsigned.apk` に生成されます。
 
 ## 使い方
 
@@ -57,9 +71,6 @@ Kotlin + Jetpack Composeで実装しています。
 
 ## カスタマイズ
 
-- **アプリ名の変更**: `app/src/main/res/values/strings.xml` の `app_name` と `MisskeyClient.APP_NAME` を修正。
-- **パッケージ名の変更**: `app/build.gradle.kts` の `namespace` / `applicationId` と、Kotlinファイルの `package` 宣言、ディレクトリ構成を揃えて変更（リファクタリング機能の利用を推奨）。
-- **コールバックスキームの変更**: `AndroidManifest.xml` の `<data android:scheme=...>` と `MisskeyClient.CALLBACK_URL` を必ずペアで変更。
 - **httpのセルフホストインスタンスに対応させる場合**: `AndroidManifest.xml` の `<application>` に `android:usesCleartextTraffic="true"` を追加（通信が平文になる点に注意）。
 
 ## 制限と拡張アイデア
