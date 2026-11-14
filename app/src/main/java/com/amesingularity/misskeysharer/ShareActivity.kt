@@ -141,6 +141,7 @@ fun ShareScreen(initialText: String, onFinish: () -> Unit) {
                     .fillMaxWidth()
                     .weight(1f),
                 label = { Text("投稿内容") },
+                supportingText = { if (text.isBlank()) Text("投稿内容を入力してください") },
                 enabled = !posting
             )
 
