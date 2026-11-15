@@ -114,8 +114,11 @@ fun ShareScreen(initialText: String, onFinish: () -> Unit) {
                 enabled = !posting
             )
 
+            // Misskey サーバーはUnicodeコードポイントで数える（サロゲートペアを1文字）。
+            // 投稿時はtrimされるため、そのままの長さではなくtrim後の長さで表示する。
+            val submittedText = text.trim()
             Text(
-                text = "${text.length} 文字",
+                text = "${submittedText.codePointCount(0, submittedText.length)} 文字",
                 style = MaterialTheme.typography.bodySmall,
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.End
