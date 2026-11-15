@@ -63,7 +63,7 @@ Kotlin + Jetpack Composeで実装しています。
 | `MiAuthCallbackActivity.kt` | `misskeysharer://miauth` ディープリンクで認証結果を受信 |
 | `MisskeyClient.kt` | MiAuth URL生成・`/api/miauth/<session>/check`・`/api/notes/create` 呼び出し（OkHttp） |
 | `Prefs.kt` | トークンや設定の保存（アプリ専用領域のSharedPreferences） |
-| `ui/Theme.kt` | Misskey風グリーンのカラーテーマ |
+| `ui/Theme.kt` | テーマ定義。Android 12+ ではMaterial You（壁紙由来のダイナミックカラー）、それ以下ではMisskey風グリーンのカスタムテーマを適用 |
 
 - **認証フロー**: UUIDセッションを生成 → `https://<instance>/miauth/<uuid>?name=...&permission=write:notes&callback=...` をブラウザで開く → 承認後にコールバックへリダイレクト → `POST /api/miauth/<session>/check` でトークン取得・保存。
 - **投稿**: `POST /api/notes/create` に `{"i": "<token>", "text": "...", "visibility": "home", "localOnly": true}` を送信。
