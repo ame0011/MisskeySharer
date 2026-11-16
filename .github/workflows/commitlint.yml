@@ -1,7 +1,7 @@
 # commitlintを使ってコミットが[Conventional Commits](https://www.conventionalcommits.org/ja/v1.0.0/)に沿っていることをチェックする
 # [公式ドキュメント](https://commitlint.js.org/guides/ci-setup.html#github-actions)から作成
 
-name: CI
+name: commitlint
 
 on: [push, pull_request]
 
