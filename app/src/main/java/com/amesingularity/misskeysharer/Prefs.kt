@@ -2,6 +2,7 @@ package com.amesingularity.misskeysharer
 
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.core.content.edit
 
 /** 連携済みのMisskeyアカウント情報 */
 data class Account(
@@ -40,22 +41,22 @@ object Prefs {
     }
 
     fun saveAccount(context: Context, instance: String, token: String, username: String?) {
-        p(context).edit()
-            .putString(KEY_INSTANCE, normalizeInstanceUrl(instance))
-            .putString(KEY_TOKEN, token)
-            .putString(KEY_USERNAME, username)
+        p(context).edit {
+            putString(KEY_INSTANCE, normalizeInstanceUrl(instance))
+            putString(KEY_TOKEN, token)
+            putString(KEY_USERNAME, username)
             // 認証が完了したので保留状態はクリア
-            .remove(KEY_PENDING_INSTANCE)
-            .remove(KEY_PENDING_SESSION)
-            .apply()
+            remove(KEY_PENDING_INSTANCE)
+            remove(KEY_PENDING_SESSION)
+        }
     }
 
     fun clearAccount(context: Context) {
-        p(context).edit()
-            .remove(KEY_INSTANCE)
-            .remove(KEY_TOKEN)
-            .remove(KEY_USERNAME)
-            .apply()
+        p(context).edit {
+            remove(KEY_INSTANCE)
+            remove(KEY_TOKEN)
+            remove(KEY_USERNAME)
+        }
     }
 
     /** 認証待ちの (instance, session) ペア。ブラウザからの復帰に使う */
@@ -67,31 +68,31 @@ object Prefs {
     }
 
     fun setPendingAuth(context: Context, instance: String, session: String) {
-        p(context).edit()
-            .putString(KEY_PENDING_INSTANCE, normalizeInstanceUrl(instance))
-            .putString(KEY_PENDING_SESSION, session)
-            .apply()
+        p(context).edit {
+            putString(KEY_PENDING_INSTANCE, normalizeInstanceUrl(instance))
+            putString(KEY_PENDING_SESSION, session)
+        }
     }
 
     fun clearPendingAuth(context: Context) {
-        p(context).edit()
-            .remove(KEY_PENDING_INSTANCE)
-            .remove(KEY_PENDING_SESSION)
-            .apply()
+        p(context).edit {
+            remove(KEY_PENDING_INSTANCE)
+            remove(KEY_PENDING_SESSION)
+        }
     }
 
     fun defaultVisibility(context: Context): String =
         p(context).getString(KEY_DEFAULT_VISIBILITY, VISIBILITY_HOME) ?: VISIBILITY_HOME
 
     fun setDefaultVisibility(context: Context, value: String) {
-        p(context).edit().putString(KEY_DEFAULT_VISIBILITY, value).apply()
+        p(context).edit { putString(KEY_DEFAULT_VISIBILITY, value) }
     }
 
     fun defaultLocalOnly(context: Context): Boolean =
         p(context).getBoolean(KEY_DEFAULT_LOCAL_ONLY, false)
 
     fun setDefaultLocalOnly(context: Context, value: Boolean) {
-        p(context).edit().putBoolean(KEY_DEFAULT_LOCAL_ONLY, value).apply()
+        p(context).edit { putBoolean(KEY_DEFAULT_LOCAL_ONLY, value) }
     }
 
     /** "misskey.io" のような入力を "https://misskey.io" に正規化する */

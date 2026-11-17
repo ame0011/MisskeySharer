@@ -2,7 +2,7 @@ package com.amesingularity.misskeysharer.ui
 
 import android.content.ActivityNotFoundException
 import android.content.Intent
-import android.net.Uri
+import androidx.core.net.toUri
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -78,7 +78,7 @@ fun MainScreen() {
         pending = Prefs.pendingAuth(context)
         try {
             context.startActivity(
-                Intent(Intent.ACTION_VIEW, Uri.parse(MisskeyClient.miAuthUrl(instance, session)))
+                Intent(Intent.ACTION_VIEW, MisskeyClient.miAuthUrl(instance, session).toUri())
             )
         } catch (e: ActivityNotFoundException) {
             Prefs.clearPendingAuth(context)
