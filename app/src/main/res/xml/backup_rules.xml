@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Android 11(API 30)以下の Auto Backup の制御。
+    MiAuth トークンを含む SharedPreferences を一切バックアップしないよう、
+    すべてのドメインを除外する（allowBackup="false" と同等の挙動）。
+    API 31(Android 12)以降は data_extraction_rules.xml が優先される。
+-->
+<full-backup-content>
+    <exclude domain="root" path="./" />
+</full-backup-content>
