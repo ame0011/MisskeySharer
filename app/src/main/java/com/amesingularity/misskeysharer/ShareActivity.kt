@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import com.amesingularity.misskeysharer.ui.AppTheme
 import com.amesingularity.misskeysharer.ui.ShareScreen
 
@@ -15,6 +16,8 @@ class ShareActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // システムバーを透明にし、ライト/ダークテーマに応じてアイコン色を自動調整する
+        enableEdgeToEdge()
 
         val textExtra = intent?.getStringExtra(Intent.EXTRA_TEXT)
         val subjectExtra = intent?.getStringExtra(Intent.EXTRA_SUBJECT)
