@@ -1,0 +1,22 @@
+Misskey Sharer lets you post text received via the Android share sheet to Misskey after a quick confirmation screen.
+
+Features:
+- Select text in any app, tap "Share", then choose "Post to Misskey" to open the composer
+- MiAuth account linking (browser-based authentication the first time, automatic afterwards)
+- Edit the text before posting
+- Character counter (counted in Unicode code points, the same method as Misskey's standard implementation)
+- Per-post visibility (public / home / followers) and "local only"
+- Save your default visibility in the settings screen
+- When sharing from a browser, the title and URL are formatted automatically
+- Character limit is 3000 characters, same as Misskey's default
+
+Requirements:
+- Android 8.0 (API 26) or later
+- Misskey v12.75 or later (an instance with MiAuth support)
+
+Notes:
+- Text sharing only (text/plain). Image attachments and multi-share are not supported
+- The auth token is stored in app-private storage and is excluded from backups and device transfers
+- License: Unlicense (public domain)
+
+Source code: https://github.com/ame0011/MisskeySharer

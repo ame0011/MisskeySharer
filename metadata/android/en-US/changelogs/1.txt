@@ -1,0 +1,2 @@
+Initial release.
+Post to Misskey straight from the Android share sheet. Supports MiAuth account linking, pre-post confirmation and editing, a character counter, and per-post visibility (public / home / followers) with "local only".
