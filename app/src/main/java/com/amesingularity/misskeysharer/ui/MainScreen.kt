@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
@@ -62,6 +63,7 @@ fun MainScreen() {
     var checking by remember { mutableStateOf(false) }
     var visibility by rememberSaveable { mutableStateOf(Prefs.defaultVisibility(context)) }
     var localOnly by rememberSaveable { mutableStateOf(Prefs.defaultLocalOnly(context)) }
+    var showClearConfirm by remember { mutableStateOf(false) }
 
     fun toast(message: String) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
@@ -196,10 +198,7 @@ fun MainScreen() {
                             style = MaterialTheme.typography.bodySmall
                         )
                         OutlinedButton(
-                            onClick = {
-                                Prefs.clearAccount(context)
-                                account = null
-                            },
+                            onClick = { showClearConfirm = true },
                             modifier = Modifier.fillMaxWidth()
                         ) {
                             Text("連携を解除")
@@ -286,5 +285,32 @@ fun MainScreen() {
 
             Spacer(Modifier.height(24.dp))
         }
+    }
+
+    if (showClearConfirm) {
+        AlertDialog(
+            onDismissRequest = { showClearConfirm = false },
+            title = { Text("連携を解除しますか？") },
+            text = { Text("保存されているアカウント連携情報を削除します。よろしいですか？") },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        Prefs.clearAccount(context)
+                        account = null
+                        showClearConfirm = false
+                    }
+                ) {
+                    Text(
+                        "解除",
+                        color = MaterialTheme.colorScheme.error
+                    )
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showClearConfirm = false }) {
+                    Text("キャンセル")
+                }
+            }
+        )
     }
 }
