@@ -58,7 +58,7 @@ object MisskeyClient {
 
             try {
                 http.newCall(request).execute().use { response ->
-                    val body = response.body?.string().orEmpty()
+                    val body = response.body.string()
                     val json = try {
                         JSONObject(body)
                     } catch (e: Exception) {
@@ -107,7 +107,7 @@ object MisskeyClient {
 
         try {
             http.newCall(request).execute().use { response ->
-                val body = response.body?.string().orEmpty()
+                val body = response.body.string()
                 if (response.isSuccessful) {
                     JSONObject(body)
                 } else {
