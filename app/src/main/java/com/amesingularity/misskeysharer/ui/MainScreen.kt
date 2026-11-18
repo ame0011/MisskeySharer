@@ -197,7 +197,7 @@ fun MainScreen() {
                             "連携済みです。他のアプリから共有すると投稿できます。",
                             style = MaterialTheme.typography.bodySmall
                         )
-                        OutlinedButton(
+                        Button(
                             onClick = { showClearConfirm = true },
                             modifier = Modifier.fillMaxWidth()
                         ) {
