@@ -45,7 +45,10 @@ Kotlin + Jetpack Composeで実装しています。
 ./gradlew assembleRelease
 ```
 
-`app/build/outputs/apk/release/app-release-unsigned.apk` に生成されます。
+`app/build/outputs/apk/release/` 配下にAPKが生成されます。
+
+- 署名なし → `app-release-unsigned.apk`
+- 署名あり(`keystore.properties` 設定済み) → `app-release.apk`
 
 ## 使い方
 
