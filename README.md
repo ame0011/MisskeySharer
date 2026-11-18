@@ -1,5 +1,11 @@
 # Misskey Sharer
 
+<p align="center">
+    <a href="https://apps.obtainium.imranr.dev/redirect?r=obtainium://add/https://github.com/ame0011/MisskeySharer">
+        <img alt="Obtaniumでインストール" src="./docs/images/badge_obtainium.jxl" height="80">
+    </a>
+</p>
+
 Androidの「共有」機能で受け取った文字列を、確認画面をはさんでMisskeyに投稿するミニアプリケーションです。
 Kotlin + Jetpack Composeで実装しています。
 
