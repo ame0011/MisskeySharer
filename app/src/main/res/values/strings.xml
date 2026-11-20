@@ -2,4 +2,12 @@
 <resources>
     <string name="app_name">Misskey Sharer</string>
     <string name="share_to">Misskeyに投稿</string>
+
+    <!-- エラー表示 -->
+    <string name="error_auth_check">認証を確認できませんでした: %1$s</string>
+    <string name="error_post_failed">投稿に失敗しました: %1$s</string>
+    <string name="error_not_authorized">まだ認証が完了していません。ブラウザで「許可する」を押してください。</string>
+    <string name="error_network">ネットワークエラー: %1$s</string>
+    <string name="error_detail_unknown">詳細不明</string>
+    <string name="error_unknown">エラー</string>
 </resources>

@@ -42,6 +42,8 @@ import androidx.compose.ui.unit.dp
 import com.amesingularity.misskeysharer.MainActivity
 import com.amesingularity.misskeysharer.MisskeyClient
 import com.amesingularity.misskeysharer.Prefs
+import com.amesingularity.misskeysharer.R
+import com.amesingularity.misskeysharer.errorDetailForDisplay
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -84,7 +86,11 @@ fun ShareScreen(initialText: String, onFinish: () -> Unit) {
             } catch (e: Exception) {
                 posting = false
                 // MainActivity と同じく、エラーも Toast で表示する（通知手段を統一）
-                Toast.makeText(context, "投稿に失敗しました: ${e.message ?: "エラー"}", Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    context,
+                    context.getString(R.string.error_post_failed, errorDetailForDisplay(context, e)),
+                    Toast.LENGTH_LONG
+                ).show()
             }
         }
     }

@@ -46,6 +46,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.amesingularity.misskeysharer.MisskeyClient
 import com.amesingularity.misskeysharer.Prefs
+import com.amesingularity.misskeysharer.R
+import com.amesingularity.misskeysharer.errorDetailForDisplay
 import kotlinx.coroutines.launch
 import java.util.UUID
 
@@ -99,7 +101,7 @@ fun MainScreen() {
                 account = Prefs.account(context)
                 toast("ログインしました")
             } catch (e: Exception) {
-                toast("認証を確認できませんでした: ${e.message ?: "エラー"}")
+                toast(context.getString(R.string.error_auth_check, errorDetailForDisplay(context, e)))
             } finally {
                 checking = false
                 pending = Prefs.pendingAuth(context)

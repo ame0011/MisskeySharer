@@ -10,8 +10,14 @@ import org.json.JSONObject
 import java.net.URLEncoder
 import java.util.concurrent.TimeUnit
 
-/** Misskey API由来のエラー */
-class MisskeyException(message: String) : Exception(message)
+/** Misskey API由来のエラー。message はサーバー由来の文言であり、表示時は原文をそのまま使う */
+open class MisskeyException(message: String) : Exception(message)
+
+/** MiAuthセッションがまだ承認されていない（表示文言はUI側で R.string.error_not_authorized から選択する） */
+class NotAuthorizedException : MisskeyException("not authorized")
+
+/** 通信の失敗。detail は技術的な原因の原文（英語等）であり、表示文言はUI側で R.string.error_network から選択する */
+class NetworkErrorException(val detail: String?) : MisskeyException(detail ?: "network error")
 
 /** MiAuth check の結果 */
 data class MiAuthResult(
@@ -70,15 +76,13 @@ object MisskeyClient {
                         val username = user?.optString("username")?.takeIf { it.isNotEmpty() }
                         MiAuthResult(token = token, username = username)
                     } else {
-                        throw MisskeyException(
-                            "まだ認証が完了していません。ブラウザで「許可する」を押してください。"
-                        )
+                        throw NotAuthorizedException()
                     }
                 }
             } catch (e: MisskeyException) {
                 throw e
             } catch (e: Exception) {
-                throw MisskeyException("ネットワークエラー: ${e.message ?: "詳細不明"}")
+                throw NetworkErrorException(e.message)
             }
         }
 
@@ -117,7 +121,7 @@ object MisskeyClient {
         } catch (e: MisskeyException) {
             throw e
         } catch (e: Exception) {
-            throw MisskeyException("ネットワークエラー: ${e.message ?: "詳細不明"}")
+            throw NetworkErrorException(e.message)
         }
     }
 

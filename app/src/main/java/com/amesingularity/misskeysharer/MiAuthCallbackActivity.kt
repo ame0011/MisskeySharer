@@ -58,7 +58,7 @@ class MiAuthCallbackActivity : ComponentActivity() {
                 // 失敗時も設定画面を開き、pendingが残っていれば「認証状況を確認」で再試行できる
                 Toast.makeText(
                     this@MiAuthCallbackActivity,
-                    "認証を確認できませんでした: ${e.message ?: "エラー"}",
+                    getString(R.string.error_auth_check, errorDetailForDisplay(this@MiAuthCallbackActivity, e)),
                     Toast.LENGTH_LONG
                 ).show()
             } finally {
