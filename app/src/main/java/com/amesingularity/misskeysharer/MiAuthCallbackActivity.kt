@@ -55,7 +55,9 @@ class MiAuthCallbackActivity : ComponentActivity() {
                 )
                 Toast.makeText(this@MiAuthCallbackActivity, getString(R.string.toast_logged_in), Toast.LENGTH_SHORT).show()
             } catch (e: Exception) {
-                // 失敗時も設定画面を開き、pendingが残っていれば「認証状況を確認」で再試行できる
+                // 失敗時も設定画面を開き、pendingが残っていれば「認証状況を確認」で再試行できる。
+                // 存在しないセッションは再確認しても成功しないため pending をクリアする
+                if (e is NoSuchSessionException) Prefs.clearPendingAuth(this@MiAuthCallbackActivity)
                 Toast.makeText(
                     this@MiAuthCallbackActivity,
                     getString(R.string.error_auth_check, errorDetailForDisplay(this@MiAuthCallbackActivity, e)),

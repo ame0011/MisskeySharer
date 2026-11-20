@@ -46,6 +46,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.amesingularity.misskeysharer.MisskeyClient
+import com.amesingularity.misskeysharer.NoSuchSessionException
 import com.amesingularity.misskeysharer.Prefs
 import com.amesingularity.misskeysharer.R
 import com.amesingularity.misskeysharer.errorDetailForDisplay
@@ -108,6 +109,8 @@ fun MainScreen() {
                 account = Prefs.account(context)
                 toast(toastLoggedIn)
             } catch (e: Exception) {
+                // 存在しないセッションは再確認しても成功しないので pending をクリアしておく
+                if (e is NoSuchSessionException) Prefs.clearPendingAuth(context)
                 toast(String.format(errorAuthCheckFormat, errorDetailForDisplay(context, e)))
             } finally {
                 checking = false

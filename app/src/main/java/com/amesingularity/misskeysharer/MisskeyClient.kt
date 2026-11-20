@@ -10,13 +10,16 @@ import org.json.JSONObject
 import java.net.URLEncoder
 import java.util.concurrent.TimeUnit
 
-/** Misskey API由来のエラー。message はサーバー由来の文言であり、表示時は原文をそのまま使う */
+/** Misskey API由来のエラー。message はサーバー由来の文言であり、表示時は原文をそのまま使う。 */
 open class MisskeyException(message: String) : Exception(message)
 
 /** MiAuthセッションがまだ承認されていない（表示文言はUI側で R.string.error_not_authorized から選択する） */
 class NotAuthorizedException : MisskeyException("not authorized")
 
-/** 通信の失敗。detail は技術的な原因の原文（英語等）であり、表示文言はUI側で R.string.error_network から選択する */
+/** MiAuthセッションが存在しない（未登録 or 取り消し済み）。表示時はサーバーからのメッセージをそのまま使う。 */
+class NoSuchSessionException(message: String) : MisskeyException(message)
+
+/** 通信の失敗。detail は技術的な原因の原文（英語等）であり、表示文言はUI側で R.string.error_network から選択する。 */
 class NetworkErrorException(val detail: String?) : MisskeyException(detail ?: "network error")
 
 /** MiAuth check の結果 */
@@ -53,7 +56,10 @@ object MisskeyClient {
 
     /**
      * MiAuthセッションの承認状況を確認し、アクセストークンを返す。
-     * 未承認の場合は MisskeyException を投げる。
+     * 
+     * - 未承認 -> NotAuthorizedException
+     * - セッションが存在しない -> NoSuchSessionException
+     * - 通信に失敗した場合 -> NetworkErrorException
      */
     suspend fun checkMiAuth(instance: String, session: String): MiAuthResult =
         withContext(Dispatchers.IO) {
@@ -64,20 +70,7 @@ object MisskeyClient {
 
             try {
                 http.newCall(request).execute().use { response ->
-                    val body = response.body.string()
-                    val json = try {
-                        JSONObject(body)
-                    } catch (e: Exception) {
-                        JSONObject()
-                    }
-                    val token = json.optString("token")
-                    if (json.optBoolean("ok", false) && token.isNotEmpty()) {
-                        val user = json.optJSONObject("user")
-                        val username = user?.optString("username")?.takeIf { it.isNotEmpty() }
-                        MiAuthResult(token = token, username = username)
-                    } else {
-                        throw NotAuthorizedException()
-                    }
+                    parseCheckResponse(response.code, response.body.string())
                 }
             } catch (e: MisskeyException) {
                 throw e
@@ -85,6 +78,40 @@ object MisskeyClient {
                 throw NetworkErrorException(e.message)
             }
         }
+
+    /**
+     * `/api/miauth/<session>/check` のステータスコードとボディから結果を判定する。
+     * 「まだ承認されていない」は 2xx かつ ok=false の場合のみとし、
+     * セッション未登録（404 または error.code が NO_SUCH_SESSION）と
+     * サーバー障害・通信異常は別の例外として区別する。
+     */
+    internal fun parseCheckResponse(code: Int, body: String): MiAuthResult {
+        val json = try {
+            JSONObject(body)
+        } catch (e: Exception) {
+            null
+        }
+
+        if (code !in 200..299) {
+            val errorCode = json?.optJSONObject("error")?.optString("code")
+            val message = parseApiError(body, code)
+            if (code == 404 || errorCode == "NO_SUCH_SESSION") {
+                throw NoSuchSessionException(message)
+            }
+            throw MisskeyException(message)
+        }
+
+        // 2xx なのに JSON でないのはプロキシ等の通信異常とみなす
+        if (json == null) throw NetworkErrorException("invalid response")
+
+        val token = json.optString("token")
+        if (json.optBoolean("ok", false) && token.isNotEmpty()) {
+            val user = json.optJSONObject("user")
+            val username = user?.optString("username")?.takeIf { it.isNotEmpty() }
+            return MiAuthResult(token = token, username = username)
+        }
+        throw NotAuthorizedException()
+    }
 
     /**
      * /api/notes/create でノートを投稿する。
