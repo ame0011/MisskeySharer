@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="share_to">Misskeyに投稿</string>
+
+    <!-- 設定画面 -->
+    <string name="settings_title">Misskey Sharer 設定</string>
+    <string name="account_title">アカウント</string>
+    <string name="account_not_connected">共有で投稿するには、まずMisskeyアカウントを連携してください。</string>
+    <string name="instance_url_label">インスタンスのURL</string>
+    <string name="auth_button">ブラウザで認証する</string>
+    <string name="auth_pending_hint">ブラウザで「許可する」を押すと自動的にこの画面に戻ります。\n戻らない場合は下のボタンで認証状況を確認できます。</string>
+    <string name="check_auth_button">認証状況を確認</string>
+    <string name="cancel_auth_button">認証をやめる</string>
+    <string name="account_connected">連携済みです。他のアプリから共有すると投稿できます。</string>
+    <string name="unlink_button">連携を解除</string>
+
+    <!-- 投稿のデフォルト設定 -->
+    <string name="defaults_title">投稿のデフォルト設定</string>
+    <string name="visibility_label">公開範囲</string>
+    <string name="visibility_public">公開</string>
+    <string name="visibility_home">ホーム</string>
+    <string name="visibility_followers">フォロワー</string>
+    <string name="local_only_label">ローカルのみ</string>
+    <string name="local_only_sub">他のインスタンスに連合させない</string>
+
+    <!-- 使い方 -->
+    <string name="howto_title">使い方</string>
+    <string name="howto_step1">1. 「ブラウザで認証する」からMisskeyにログインし、「許可する」を押します。</string>
+    <string name="howto_step2">2. 他のアプリで文字列を選んで「共有」→「Misskeyに投稿」を選びます。</string>
+    <string name="howto_step3">3. 確認画面で内容と公開範囲を確かめて「投稿する」を押します。</string>
+
+    <!-- 連携解除の確認 -->
+    <string name="unlink_dialog_title">連携を解除しますか？</string>
+    <string name="unlink_dialog_text">保存されているアカウント連携情報を削除します。よろしいですか？</string>
+    <string name="unlink_confirm">解除</string>
+    <string name="cancel">キャンセル</string>
+
+    <!-- 共有・投稿画面 -->
+    <string name="post_destination">投稿先: %1$s</string>
+    <string name="note_label">投稿内容</string>
+    <string name="note_required">投稿内容を入力してください</string>
+    <string name="post_button">投稿する</string>
+
+    <plurals name="char_count">
+        <item quantity="other">%d文字</item>
+    </plurals>
+
+    <!-- アカウント未設定画面 -->
+    <string name="no_account_title">アカウントが未設定です</string>
+    <string name="no_account_body">先に設定画面でMisskeyアカウントを連携してください。</string>
+    <string name="open_settings">設定を開く</string>
+
+    <!-- 通知・エラーメッセージ -->
+    <string name="toast_instance_url_required">インスタンスのURLを入力してください</string>
+    <string name="toast_browser_not_found">ブラウザが見つかりませんでした</string>
+    <string name="toast_logged_in">ログインしました</string>
+    <string name="toast_posted">投稿しました</string>
+    <string name="error_callback_read_failed">認証情報を読み取れませんでした</string>
+    <string name="error_auth_check">認証を確認できませんでした: %1$s</string>
+    <string name="error_post_failed">投稿に失敗しました: %1$s</string>
+    <string name="error_not_authorized">まだ認証が完了していません。ブラウザで「許可する」を押してください。</string>
+    <string name="error_network">ネットワークエラー: %1$s</string>
+    <string name="error_detail_unknown">詳細不明</string>
+    <string name="error_unknown">エラー</string>
+</resources>

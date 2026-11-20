@@ -39,7 +39,7 @@ class MiAuthCallbackActivity : ComponentActivity() {
         )
 
         if (session.isNullOrEmpty() || instance.isEmpty()) {
-            Toast.makeText(this, "認証情報を読み取れませんでした", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, getString(R.string.error_callback_read_failed), Toast.LENGTH_LONG).show()
             finish()
             return
         }
@@ -53,7 +53,7 @@ class MiAuthCallbackActivity : ComponentActivity() {
                     result.token,
                     result.username
                 )
-                Toast.makeText(this@MiAuthCallbackActivity, "ログインしました", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@MiAuthCallbackActivity, getString(R.string.toast_logged_in), Toast.LENGTH_SHORT).show()
             } catch (e: Exception) {
                 // 失敗時も設定画面を開き、pendingが残っていれば「認証状況を確認」で再試行できる
                 Toast.makeText(

@@ -42,6 +42,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.amesingularity.misskeysharer.MisskeyClient
@@ -67,6 +68,12 @@ fun MainScreen() {
     var localOnly by rememberSaveable { mutableStateOf(Prefs.defaultLocalOnly(context)) }
     var showClearConfirm by remember { mutableStateOf(false) }
 
+    // 通知・エラー文言は合成中に取得しておく（locale 変更時に再計算され、LocaleContext の警告を回避）
+    val toastInstanceUrlRequired = stringResource(R.string.toast_instance_url_required)
+    val toastBrowserNotFound = stringResource(R.string.toast_browser_not_found)
+    val toastLoggedIn = stringResource(R.string.toast_logged_in)
+    val errorAuthCheckFormat = stringResource(R.string.error_auth_check)
+
     fun toast(message: String) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
@@ -74,7 +81,7 @@ fun MainScreen() {
     fun startAuth() {
         val instance = Prefs.normalizeInstanceUrl(instanceInput)
         if (instance.isEmpty()) {
-            toast("インスタンスのURLを入力してください")
+            toast(toastInstanceUrlRequired)
             return
         }
         val session = UUID.randomUUID().toString()
@@ -87,7 +94,7 @@ fun MainScreen() {
         } catch (e: ActivityNotFoundException) {
             Prefs.clearPendingAuth(context)
             pending = null
-            toast("ブラウザが見つかりませんでした")
+            toast(toastBrowserNotFound)
         }
     }
 
@@ -99,9 +106,9 @@ fun MainScreen() {
                 val result = MisskeyClient.checkMiAuth(p.first, p.second)
                 Prefs.saveAccount(context, p.first, result.token, result.username)
                 account = Prefs.account(context)
-                toast("ログインしました")
+                toast(toastLoggedIn)
             } catch (e: Exception) {
-                toast(context.getString(R.string.error_auth_check, errorDetailForDisplay(context, e)))
+                toast(String.format(errorAuthCheckFormat, errorDetailForDisplay(context, e)))
             } finally {
                 checking = false
                 pending = Prefs.pendingAuth(context)
@@ -110,13 +117,13 @@ fun MainScreen() {
     }
 
     val visibilityOptions = listOf(
-        "公開" to Prefs.VISIBILITY_PUBLIC,
-        "ホーム" to Prefs.VISIBILITY_HOME,
-        "フォロワー" to Prefs.VISIBILITY_FOLLOWERS
+        stringResource(R.string.visibility_public) to Prefs.VISIBILITY_PUBLIC,
+        stringResource(R.string.visibility_home) to Prefs.VISIBILITY_HOME,
+        stringResource(R.string.visibility_followers) to Prefs.VISIBILITY_FOLLOWERS
     )
 
     Scaffold(
-        topBar = { TopAppBar(title = { Text("Misskey Sharer 設定") }) }
+        topBar = { TopAppBar(title = { Text(stringResource(R.string.settings_title)) }) }
     ) { padding ->
         Column(
             modifier = Modifier
@@ -135,7 +142,7 @@ fun MainScreen() {
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     Text(
-                        "アカウント",
+                        stringResource(R.string.account_title),
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold
                     )
@@ -143,14 +150,14 @@ fun MainScreen() {
                     val acc = account
                     if (acc == null) {
                         Text(
-                            "共有で投稿するには、まずMisskeyアカウントを連携してください。",
+                            stringResource(R.string.account_not_connected),
                             style = MaterialTheme.typography.bodyMedium
                         )
                         OutlinedTextField(
                             value = instanceInput,
                             onValueChange = { instanceInput = it },
-                            label = { Text("インスタンスのURL") },
-                            placeholder = { Text("https://misskey.io") },
+                            label = { Text(stringResource(R.string.instance_url_label)) },
+                            placeholder = { Text(stringResource(R.string.instance_url_placeholder)) },
                             singleLine = true,
                             enabled = !checking,
                             modifier = Modifier.fillMaxWidth()
@@ -160,13 +167,12 @@ fun MainScreen() {
                             enabled = !checking && instanceInput.isNotBlank(),
                             modifier = Modifier.fillMaxWidth()
                         ) {
-                            Text("ブラウザで認証する")
+                            Text(stringResource(R.string.auth_button))
                         }
 
                         if (pending != null) {
                             Text(
-                                "ブラウザで「許可する」を押すと自動的にこの画面に戻ります。\n" +
-                                    "戻らない場合は下のボタンで認証状況を確認できます。",
+                                stringResource(R.string.auth_pending_hint),
                                 style = MaterialTheme.typography.bodySmall
                             )
                             OutlinedButton(
@@ -178,7 +184,7 @@ fun MainScreen() {
                                     CircularProgressIndicator(modifier = Modifier.size(18.dp))
                                     Spacer(Modifier.size(8.dp))
                                 }
-                                Text("認証状況を確認")
+                                Text(stringResource(R.string.check_auth_button))
                             }
                             TextButton(
                                 onClick = {
@@ -187,7 +193,7 @@ fun MainScreen() {
                                 },
                                 modifier = Modifier.fillMaxWidth()
                             ) {
-                                Text("認証をやめる")
+                                Text(stringResource(R.string.cancel_auth_button))
                             }
                         }
                     } else {
@@ -196,14 +202,14 @@ fun MainScreen() {
                             style = MaterialTheme.typography.bodyLarge
                         )
                         Text(
-                            "連携済みです。他のアプリから共有すると投稿できます。",
+                            stringResource(R.string.account_connected),
                             style = MaterialTheme.typography.bodySmall
                         )
                         Button(
                             onClick = { showClearConfirm = true },
                             modifier = Modifier.fillMaxWidth()
                         ) {
-                            Text("連携を解除")
+                            Text(stringResource(R.string.unlink_button))
                         }
                     }
                 }
@@ -216,12 +222,12 @@ fun MainScreen() {
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     Text(
-                        "投稿のデフォルト設定",
+                        stringResource(R.string.defaults_title),
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold
                     )
 
-                    Text("公開範囲", style = MaterialTheme.typography.bodyMedium)
+                    Text(stringResource(R.string.visibility_label), style = MaterialTheme.typography.bodyMedium)
                     SingleChoiceSegmentedButtonRow(modifier = Modifier.fillMaxWidth()) {
                         visibilityOptions.forEachIndexed { index, (label, value) ->
                             SegmentedButton(
@@ -242,9 +248,9 @@ fun MainScreen() {
 
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Column(modifier = Modifier.weight(1f)) {
-                            Text("ローカルのみ", style = MaterialTheme.typography.bodyMedium)
+                            Text(stringResource(R.string.local_only_label), style = MaterialTheme.typography.bodyMedium)
                             Text(
-                                "他のインスタンスに連合させない",
+                                stringResource(R.string.local_only_sub),
                                 style = MaterialTheme.typography.bodySmall
                             )
                         }
@@ -266,20 +272,20 @@ fun MainScreen() {
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     Text(
-                        "使い方",
+                        stringResource(R.string.howto_title),
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold
                     )
                     Text(
-                        "1. 「ブラウザで認証する」からMisskeyにログインし、「許可する」を押します。",
+                        stringResource(R.string.howto_step1),
                         style = MaterialTheme.typography.bodyMedium
                     )
                     Text(
-                        "2. 他のアプリで文字列を選んで「共有」→「Misskeyに投稿」を選びます。",
+                        stringResource(R.string.howto_step2),
                         style = MaterialTheme.typography.bodyMedium
                     )
                     Text(
-                        "3. 確認画面で内容と公開範囲を確かめて「投稿する」を押します。",
+                        stringResource(R.string.howto_step3),
                         style = MaterialTheme.typography.bodyMedium
                     )
                 }
@@ -292,8 +298,8 @@ fun MainScreen() {
     if (showClearConfirm) {
         AlertDialog(
             onDismissRequest = { showClearConfirm = false },
-            title = { Text("連携を解除しますか？") },
-            text = { Text("保存されているアカウント連携情報を削除します。よろしいですか？") },
+            title = { Text(stringResource(R.string.unlink_dialog_title)) },
+            text = { Text(stringResource(R.string.unlink_dialog_text)) },
             confirmButton = {
                 TextButton(
                     onClick = {
@@ -303,14 +309,14 @@ fun MainScreen() {
                     }
                 ) {
                     Text(
-                        "解除",
+                        stringResource(R.string.unlink_confirm),
                         color = MaterialTheme.colorScheme.error
                     )
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showClearConfirm = false }) {
-                    Text("キャンセル")
+                    Text(stringResource(R.string.cancel))
                 }
             }
         )

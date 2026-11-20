@@ -1,13 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Misskey Sharer</string>
-    <string name="share_to">Misskeyに投稿</string>
+    <string name="app_name" translatable="false">Misskey Sharer</string>
+    <string name="share_to">Post to Misskey</string>
 
-    <!-- エラー表示 -->
-    <string name="error_auth_check">認証を確認できませんでした: %1$s</string>
-    <string name="error_post_failed">投稿に失敗しました: %1$s</string>
-    <string name="error_not_authorized">まだ認証が完了していません。ブラウザで「許可する」を押してください。</string>
-    <string name="error_network">ネットワークエラー: %1$s</string>
-    <string name="error_detail_unknown">詳細不明</string>
-    <string name="error_unknown">エラー</string>
+    <!-- 設定画面 -->
+    <string name="settings_title">Misskey Sharer Settings</string>
+    <string name="account_title">Account</string>
+    <string name="account_not_connected">To post via sharing, connect your Misskey account first.</string>
+    <string name="instance_url_label">Instance URL</string>
+    <string name="instance_url_placeholder" translatable="false">https://misskey.io</string>
+    <string name="auth_button">Authenticate in browser</string>
+    <string name="auth_pending_hint">Press \"Allow\" in the browser and this screen will reopen automatically.\nIf it does not, you can check the authentication status with the button below.</string>
+    <string name="check_auth_button">Check authentication status</string>
+    <string name="cancel_auth_button">Cancel authentication</string>
+    <string name="account_connected">Connected. You can post by sharing from other apps.</string>
+    <string name="unlink_button">Unlink</string>
+
+    <!-- 投稿のデフォルト設定 -->
+    <string name="defaults_title">Default post settings</string>
+    <string name="visibility_label">Visibility</string>
+    <string name="visibility_public">Public</string>
+    <string name="visibility_home">Home</string>
+    <string name="visibility_followers">Followers</string>
+    <string name="local_only_label">Local only</string>
+    <string name="local_only_sub">Do not federate to other instances</string>
+
+    <!-- 使い方 -->
+    <string name="howto_title">How to use</string>
+    <string name="howto_step1">1. Sign in to Misskey from \"Authenticate in browser\" and press \"Allow\".</string>
+    <string name="howto_step2">2. Select text in another app, then choose \"Share\" → \"Post to Misskey\".</string>
+    <string name="howto_step3">3. On the confirmation screen, check the text and visibility, then press \"Post\".</string>
+
+    <!-- 連携解除の確認 -->
+    <string name="unlink_dialog_title">Unlink the account?</string>
+    <string name="unlink_dialog_text">This deletes the stored account connection. Are you sure?</string>
+    <string name="unlink_confirm">Unlink</string>
+    <string name="cancel">Cancel</string>
+
+    <!-- 共有・投稿画面 -->
+    <string name="post_destination">Post to: %1$s</string>
+    <string name="note_label">Post text</string>
+    <string name="note_required">Enter the post text</string>
+    <string name="post_button">Post</string>
+
+    <plurals name="char_count">
+        <item quantity="one">%d character</item>
+        <item quantity="other">%d characters</item>
+    </plurals>
+
+    <!-- アカウント未設定画面 -->
+    <string name="no_account_title">Account not configured</string>
+    <string name="no_account_body">Connect your Misskey account in the settings screen first.</string>
+    <string name="open_settings">Open settings</string>
+
+    <!-- 通知・エラーメッセージ -->
+    <string name="toast_instance_url_required">Enter the instance URL</string>
+    <string name="toast_browser_not_found">Browser not found</string>
+    <string name="toast_logged_in">Signed in</string>
+    <string name="toast_posted">Posted</string>
+    <string name="error_callback_read_failed">Could not read the authentication information</string>
+    <string name="error_auth_check">Could not verify authentication: %1$s</string>
+    <string name="error_post_failed">Failed to post: %1$s</string>
+    <string name="error_not_authorized">Authentication is not complete yet. Press \"Allow\" in the browser.</string>
+    <string name="error_network">Network error: %1$s</string>
+    <string name="error_detail_unknown">details unknown</string>
+    <string name="error_unknown">error</string>
 </resources>

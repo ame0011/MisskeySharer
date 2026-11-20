@@ -36,6 +36,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -58,6 +60,10 @@ fun ShareScreen(initialText: String, onFinish: () -> Unit) {
     var localOnly by rememberSaveable { mutableStateOf(Prefs.defaultLocalOnly(context)) }
     var posting by remember { mutableStateOf(false) }
 
+    // 通知・エラー文言は合成中に取得しておく（locale 変更時に再計算され、LocaleContext の警告を回避）
+    val toastPosted = stringResource(R.string.toast_posted)
+    val errorPostFailedFormat = stringResource(R.string.error_post_failed)
+
     val acc = account
     if (acc == null) {
         NoAccountScreen()
@@ -65,9 +71,9 @@ fun ShareScreen(initialText: String, onFinish: () -> Unit) {
     }
 
     val visibilityOptions = listOf(
-        "公開" to Prefs.VISIBILITY_PUBLIC,
-        "ホーム" to Prefs.VISIBILITY_HOME,
-        "フォロワー" to Prefs.VISIBILITY_FOLLOWERS
+        stringResource(R.string.visibility_public) to Prefs.VISIBILITY_PUBLIC,
+        stringResource(R.string.visibility_home) to Prefs.VISIBILITY_HOME,
+        stringResource(R.string.visibility_followers) to Prefs.VISIBILITY_FOLLOWERS
     )
 
     fun post() {
@@ -81,14 +87,14 @@ fun ShareScreen(initialText: String, onFinish: () -> Unit) {
                     visibility = visibility,
                     localOnly = localOnly
                 )
-                Toast.makeText(context, "投稿しました", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, toastPosted, Toast.LENGTH_SHORT).show()
                 onFinish()
             } catch (e: Exception) {
                 posting = false
                 // MainActivity と同じく、エラーも Toast で表示する（通知手段を統一）
                 Toast.makeText(
                     context,
-                    context.getString(R.string.error_post_failed, errorDetailForDisplay(context, e)),
+                    String.format(errorPostFailedFormat, errorDetailForDisplay(context, e)),
                     Toast.LENGTH_LONG
                 ).show()
             }
@@ -96,7 +102,7 @@ fun ShareScreen(initialText: String, onFinish: () -> Unit) {
     }
 
     Scaffold(
-        topBar = { TopAppBar(title = { Text("Misskeyに投稿") }) }
+        topBar = { TopAppBar(title = { Text(stringResource(R.string.share_to)) }) }
     ) { padding ->
         Column(
             modifier = Modifier
@@ -108,7 +114,10 @@ fun ShareScreen(initialText: String, onFinish: () -> Unit) {
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             Text(
-                text = "投稿先: @${acc.username ?: "?"}@${acc.instance.removePrefix("https://").removePrefix("http://")}",
+                text = stringResource(
+                    R.string.post_destination,
+                    "@${acc.username ?: "?"}@${acc.instance.removePrefix("https://").removePrefix("http://")}"
+                ),
                 style = MaterialTheme.typography.bodySmall
             )
 
@@ -118,22 +127,23 @@ fun ShareScreen(initialText: String, onFinish: () -> Unit) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f),
-                label = { Text("投稿内容") },
-                supportingText = { if (text.isBlank()) Text("投稿内容を入力してください") },
+                label = { Text(stringResource(R.string.note_label)) },
+                supportingText = { if (text.isBlank()) Text(stringResource(R.string.note_required)) },
                 enabled = !posting
             )
 
             // Misskey サーバーはUnicodeコードポイントで数える（サロゲートペアを1文字）。
             // 投稿時はtrimされるため、そのままの長さではなくtrim後の長さで表示する。
             val submittedText = text.trim()
+            val charCount = submittedText.codePointCount(0, submittedText.length)
             Text(
-                text = "${submittedText.codePointCount(0, submittedText.length)} 文字",
+                text = pluralStringResource(R.plurals.char_count, charCount, charCount),
                 style = MaterialTheme.typography.bodySmall,
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.End
             )
 
-            Text("公開範囲", style = MaterialTheme.typography.bodyMedium)
+            Text(stringResource(R.string.visibility_label), style = MaterialTheme.typography.bodyMedium)
             SingleChoiceSegmentedButtonRow(modifier = Modifier.fillMaxWidth()) {
                 visibilityOptions.forEachIndexed { index, (label, value) ->
                     SegmentedButton(
@@ -151,9 +161,9 @@ fun ShareScreen(initialText: String, onFinish: () -> Unit) {
 
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Column(modifier = Modifier.weight(1f)) {
-                    Text("ローカルのみ", style = MaterialTheme.typography.bodyMedium)
+                    Text(stringResource(R.string.local_only_label), style = MaterialTheme.typography.bodyMedium)
                     Text(
-                        "他のインスタンスに連合させない",
+                        stringResource(R.string.local_only_sub),
                         style = MaterialTheme.typography.bodySmall
                     )
                 }
@@ -180,14 +190,14 @@ fun ShareScreen(initialText: String, onFinish: () -> Unit) {
                         onClick = onFinish,
                         modifier = Modifier.weight(1f)
                     ) {
-                        Text("キャンセル")
+                        Text(stringResource(R.string.cancel))
                     }
                     Button(
                         onClick = { post() },
                         modifier = Modifier.weight(1f),
                         enabled = text.isNotBlank()
                     ) {
-                        Text("投稿する")
+                        Text(stringResource(R.string.post_button))
                     }
                 }
             }
@@ -209,13 +219,13 @@ fun NoAccountScreen() {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                "アカウントが未設定です",
+                stringResource(R.string.no_account_title),
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold
             )
             Spacer(Modifier.height(8.dp))
             Text(
-                "先に設定画面でMisskeyアカウントを連携してください。",
+                stringResource(R.string.no_account_body),
                 style = MaterialTheme.typography.bodyMedium
             )
             Spacer(Modifier.height(16.dp))
@@ -226,7 +236,7 @@ fun NoAccountScreen() {
                 )
                 (context as? ComponentActivity)?.finish()
             }) {
-                Text("設定を開く")
+                Text(stringResource(R.string.open_settings))
             }
         }
     }
