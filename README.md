@@ -24,7 +24,7 @@ Kotlin + Jetpack Composeで実装しています。
 | 項目 | 要件 |
 |---|---|
 | 端末 | Android 8.0（API 26）以上 |
-| 開発環境 | Android Studio Koala Feature Drop (2024.1.2) 以降、JDK 17 |
+| 開発環境 | Android Studio Koala Feature Drop (2024.1.2) 以降、Temurin JDK 25 |
 | Misskey | v12.75以上（MiAuth対応インスタンス） |
 
 ## ビルド手順
@@ -37,10 +37,20 @@ Kotlin + Jetpack Composeで実装しています。
 
 ### コマンドライン
 
+[mise](https://mise.jdx.dev) に対応しています。
+
+```bash
+mise install      # JDK 25 (Eclipse Temurin) をインストール
+mise run build    # デバッグビルド（= ./gradlew assembleDebug）
+mise run release  # リリースビルド（= ./gradlew assembleRelease）
+mise run test     # ユニットテスト
+mise run check    # CIと同じチェック（= ./gradlew build）
+```
+
 #### デバッグビルド
 
 ```bash
-./gradlew assembleDebug
+mise build
 ```
 
 `app/build/outputs/apk/debug/app-debug.apk` に生成されます。
@@ -48,7 +58,7 @@ Kotlin + Jetpack Composeで実装しています。
 #### リリースビルド
 
 ```bash
-./gradlew assembleRelease
+mise release
 ```
 
 `app/build/outputs/apk/release/` 配下にAPKが生成されます。
