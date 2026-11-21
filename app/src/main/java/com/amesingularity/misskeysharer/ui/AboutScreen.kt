@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
@@ -105,11 +106,17 @@ fun AboutScreen(onBack: () -> Unit) {
                     // カード最下部のリポジトリとライセンスのボタン
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        horizontalArrangement = Arrangement.spacedBy(0.dp)
                     ) {
                         TextButton(
                             onClick = { openUrl(repositoryUrl) },
-                            modifier = Modifier.weight(1f)
+                            modifier = Modifier.weight(1f),
+                            shape = RoundedCornerShape(
+                                topStart = 12.dp,
+                                bottomStart = 12.dp,
+                                topEnd = 0.dp,
+                                bottomEnd = 0.dp
+                            )
                         ) {
                             Text(
                                 text = stringResource(R.string.about_repository),
@@ -118,7 +125,13 @@ fun AboutScreen(onBack: () -> Unit) {
                         }
                         TextButton(
                             onClick = { openUrl(licenseUrl) },
-                            modifier = Modifier.weight(1f)
+                            modifier = Modifier.weight(1f),
+                            shape = RoundedCornerShape(
+                                topStart = 0.dp,
+                                bottomStart = 0.dp,
+                                topEnd = 12.dp,
+                                bottomEnd = 12.dp
+                            )
                         ) {
                             Text(
                                 text = stringResource(R.string.about_license_link),
