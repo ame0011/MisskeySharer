@@ -2,7 +2,6 @@ package com.amesingularity.misskeysharer.ui
 
 import android.content.ActivityNotFoundException
 import android.content.Intent
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -34,7 +33,6 @@ import com.mikepenz.aboutlibraries.ui.compose.m3.LibrariesContainer
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AboutScreen(onBack: () -> Unit) {
-    BackHandler(onBack = onBack)
     val context = LocalContext.current
 
     // アプリのバージョン名
