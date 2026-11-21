@@ -2,9 +2,9 @@ package com.amesingularity.misskeysharer.ui
 
 import android.content.ActivityNotFoundException
 import android.content.Intent
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import com.amesingularity.misskeysharer.R
@@ -93,11 +94,6 @@ fun AboutScreen(onBack: () -> Unit) {
                         )
                     }
                     Text(
-                        stringResource(R.string.about_repository),
-                        style = MaterialTheme.typography.bodyMedium,
-                        modifier = Modifier.clickable { openUrl(repositoryUrl) }
-                    )
-                    Text(
                         stringResource(R.string.about_license_title),
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold
@@ -106,12 +102,30 @@ fun AboutScreen(onBack: () -> Unit) {
                         stringResource(R.string.about_license_text),
                         style = MaterialTheme.typography.bodyMedium
                     )
-                    Text(
-                        stringResource(R.string.about_license_link),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.clickable { openUrl(licenseUrl) }
-                    )
+                    // カード最下部のリポジトリとライセンスのボタン
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        TextButton(
+                            onClick = { openUrl(repositoryUrl) },
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            Text(
+                                text = stringResource(R.string.about_repository),
+                                textAlign = TextAlign.Center
+                            )
+                        }
+                        TextButton(
+                            onClick = { openUrl(licenseUrl) },
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            Text(
+                                text = stringResource(R.string.about_license_link),
+                                textAlign = TextAlign.Center
+                            )
+                        }
+                    }
                 }
             }
 
