@@ -31,6 +31,18 @@
     <string name="howto_step2">2. Select text in another app, then choose \"Share\" → \"Post to Misskey\".</string>
     <string name="howto_step3">3. On the confirmation screen, check the text and visibility, then press \"Post\".</string>
 
+    <!-- About画面 -->
+    <string name="about_button">About &amp; licenses</string>
+    <string name="about_title">About</string>
+    <string name="about_version">Version %1$s</string>
+    <string name="about_repository">Source repository</string>
+    <string name="about_repository_url" translatable="false">https://github.com/ame0011/MisskeySharer</string>
+    <string name="about_license_title">License of this app</string>
+    <string name="about_license_text">This software is released into the public domain under The Unlicense.</string>
+    <string name="about_license_link" translatable="false">The Unlicense</string>
+    <string name="about_license_url" translatable="false">https://unlicense.org</string>
+    <string name="about_oss_title">Open-source licenses</string>
+
     <!-- 連携解除の確認 -->
     <string name="unlink_dialog_title">Unlink the account?</string>
     <string name="unlink_dialog_text">This deletes the stored account connection. Are you sure?</string>

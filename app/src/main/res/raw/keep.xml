@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- r8.optimizedResourceShrinking によってAboutLibrariesが作る aboutlibraries.json が削除されるのを防ぐ -->
+<resources xmlns:tools="http://schemas.android.com/tools"
+    tools:keep="@raw/aboutlibraries" />

@@ -55,7 +55,7 @@ import java.util.UUID
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen() {
+fun MainScreen(onAbout: () -> Unit = {}) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
 
@@ -292,6 +292,13 @@ fun MainScreen() {
                         style = MaterialTheme.typography.bodyMedium
                     )
                 }
+            }
+
+            TextButton(
+                onClick = onAbout,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(stringResource(R.string.about_button))
             }
 
             Spacer(Modifier.height(24.dp))

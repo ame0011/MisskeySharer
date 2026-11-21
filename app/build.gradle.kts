@@ -3,6 +3,8 @@ import java.util.Properties
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.plugin.compose")
+    // Aboutページで表示する依存ライブラリとライセンス情報をビルド時に収集する
+    id("com.mikepenz.aboutlibraries.plugin.android")
 }
 
 // リリース署名の設定。
@@ -84,6 +86,9 @@ dependencies {
 
     // Misskey API (HTTP) 通信用
     implementation("com.squareup.okhttp3:okhttp:5.5.1")
+
+    // Aboutページでのライセンス一覧表示
+    implementation("com.mikepenz:aboutlibraries-compose-m3:15.3.0")
 
     // 単体テスト
     testImplementation("junit:junit:4.13.2")
