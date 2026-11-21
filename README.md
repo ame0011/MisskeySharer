@@ -38,14 +38,9 @@ Kotlin + Jetpack Composeで実装しています。
 ### コマンドライン
 
 [mise](https://mise.jdx.dev) に対応しています。
+`mise install` でJDKをインストールし、`mise run <タスク名>` でタスクを実行できます。
 
-```bash
-mise install      # JDK 25 (Eclipse Temurin) をインストール
-mise run build    # デバッグビルド（= ./gradlew assembleDebug）
-mise run release  # リリースビルド（= ./gradlew assembleRelease）
-mise run test     # ユニットテスト
-mise run check    # CIと同じチェック（= ./gradlew build）
-```
+`mise tasks` で実行可能なタスクを一覧できます。
 
 #### デバッグビルド
 
