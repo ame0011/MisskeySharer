@@ -9,10 +9,20 @@ description = "デバッグビルド (app/build/outputs/apk/debug/app-debug.apk)
 run = "./gradlew assembleDebug"
 run_windows = "gradlew.bat assembleDebug"
 
+[tasks.build-install]
+description = "デバッグビルドして端末にインストール"
+depends = ["build"]
+run = "adb install -r app/build/outputs/apk/debug/app-debug.apk"
+
 [tasks.release]
 description = "リリースビルド (keystore.propertiesが無ければ未署名)"
 run = "./gradlew assembleRelease"
 run_windows = "gradlew.bat assembleRelease"
+
+[tasks.release-install]
+description = "リリースビルドして端末にインストール (keystore.propertiesが無ければ未署名)"
+depends = ["release"]
+run = "adb install -r app/build/outputs/apk/release/app-release.apk"
 
 [tasks.test]
 description = "ユニットテスト (Robolectric)"
