@@ -39,7 +39,7 @@
     <string name="about_repository_url" translatable="false">https://github.com/ame0011/MisskeySharer</string>
     <string name="about_license_title">License of this app</string>
     <string name="about_license_text">This software is released into the public domain under The Unlicense.</string>
-    <string name="about_license_link" translatable="false">The Unlicense</string>
+    <string name="about_license_link">License</string>
     <string name="about_license_url" translatable="false">https://unlicense.org</string>
     <string name="about_oss_title">Open-source licenses</string>
 

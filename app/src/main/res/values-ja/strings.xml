@@ -36,6 +36,7 @@
     <string name="about_repository">リポジトリ</string>
     <string name="about_license_title">このアプリのライセンス</string>
     <string name="about_license_text">本ソフトウェアは The Unlicense により公開されています。</string>
+    <string name="about_license_link">ライセンス</string>
     <string name="about_oss_title">オープンソースライセンスの一覧</string>
 
     <!-- 連携解除の確認 -->
