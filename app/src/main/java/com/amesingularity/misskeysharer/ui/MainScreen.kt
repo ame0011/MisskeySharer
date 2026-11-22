@@ -73,6 +73,7 @@ fun MainScreen(onAbout: () -> Unit = {}) {
 
     // 通知・エラー文言は合成中に取得しておく（locale 変更時に再計算され、LocaleContext の警告を回避）
     val toastInstanceUrlRequired = stringResource(R.string.toast_instance_url_required)
+    val toastInstanceUrlInvalid = stringResource(R.string.toast_instance_url_invalid)
     val toastBrowserNotFound = stringResource(R.string.toast_browser_not_found)
     val toastLoggedIn = stringResource(R.string.toast_logged_in)
     val errorAuthCheckFormat = stringResource(R.string.error_auth_check)
@@ -82,11 +83,15 @@ fun MainScreen(onAbout: () -> Unit = {}) {
     }
 
     fun startAuth() {
-        val instance = Prefs.normalizeInstanceUrl(instanceInput)
-        if (instance.isEmpty()) {
+        if (instanceInput.isBlank()) {
             toast(toastInstanceUrlRequired)
             return
         }
+        if (!Prefs.isValidInstanceUrl(instanceInput)) {
+            toast(toastInstanceUrlInvalid)
+            return
+        }
+        val instance = Prefs.normalizeInstanceUrl(instanceInput)
         val session = UUID.randomUUID().toString()
         Prefs.setPendingAuth(context, instance, session)
         pending = Prefs.pendingAuth(context)

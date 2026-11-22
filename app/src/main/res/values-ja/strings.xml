@@ -67,6 +67,7 @@
 
     <!-- 通知・エラーメッセージ -->
     <string name="toast_instance_url_required">インスタンスのURLを入力してください</string>
+    <string name="toast_instance_url_invalid">有効なインスタンスのURLを入力してください</string>
     <string name="toast_browser_not_found">ブラウザが見つかりませんでした</string>
     <string name="toast_logged_in">ログインしました</string>
     <string name="toast_posted">投稿しました</string>

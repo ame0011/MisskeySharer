@@ -38,7 +38,7 @@ class MiAuthCallbackActivity : ComponentActivity() {
             pending?.first ?: instanceFromUrl.orEmpty()
         )
 
-        if (session.isNullOrEmpty() || instance.isEmpty()) {
+        if (session.isNullOrEmpty() || !Prefs.isValidInstanceUrl(instance)) {
             Toast.makeText(this, getString(R.string.error_callback_read_failed), Toast.LENGTH_LONG).show()
             finish()
             return

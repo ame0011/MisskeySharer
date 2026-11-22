@@ -72,6 +72,7 @@
 
     <!-- 通知・エラーメッセージ -->
     <string name="toast_instance_url_required">Enter the instance URL</string>
+    <string name="toast_instance_url_invalid">Enter a valid instance URL</string>
     <string name="toast_browser_not_found">Browser not found</string>
     <string name="toast_logged_in">Signed in</string>
     <string name="toast_posted">Posted</string>

@@ -3,6 +3,7 @@ package com.amesingularity.misskeysharer
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.content.edit
+import java.net.URL
 
 /** 連携済みのMisskeyアカウント情報 */
 data class Account(
@@ -118,9 +119,35 @@ object Prefs {
     fun normalizeInstanceUrl(raw: String): String {
         var s = raw.trim()
         if (s.isEmpty()) return s
-        if (!s.startsWith("http://") && !s.startsWith("https://")) {
+        if (!s.startsWith("http://", ignoreCase = true) &&
+            !s.startsWith("https://", ignoreCase = true)
+        ) {
             s = "https://$s"
         }
         return s.trimEnd('/')
+    }
+
+    /**
+     * 認証に使えるインスタンスURLかどうかを判定する。
+     * スキームとホストが必要。クエリ・フラグメント・ユーザー情報は
+     * APIパスを連結するときに壊れるため拒否する。
+     */
+    fun isValidInstanceUrl(raw: String): Boolean {
+        val normalized = normalizeInstanceUrl(raw)
+        if (normalized.isEmpty()) return false
+        // "ftp://example.com" のように別スキームが付いた入力は
+        // 正規化で "https://ftp://example.com" にならないよう拒否する
+        if (normalized.indexOf("://") != normalized.lastIndexOf("://")) return false
+        return try {
+            val url = URL(normalized)
+            (url.protocol.equals("http", ignoreCase = true) ||
+                url.protocol.equals("https", ignoreCase = true)) &&
+                url.host.isNotEmpty() &&
+                url.query == null &&
+                url.ref == null &&
+                url.userInfo == null
+        } catch (e: Exception) {
+            false
+        }
     }
 }
