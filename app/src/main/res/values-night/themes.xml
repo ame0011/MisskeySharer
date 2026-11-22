@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+        ダークモード時は Window 背景もダークにする。
+        Compose が描画される前や画面遷移のクロスフェード中にライト背景が露出するのを防ぐ。
+    -->
+    <style name="Theme.MisskeySharer" parent="android:Theme.Material.NoActionBar">
+        <item name="android:windowBackground">@color/window_background_dark</item>
+    </style>
+</resources>

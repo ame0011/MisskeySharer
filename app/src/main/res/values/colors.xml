@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="ic_launcher_background">#86B300</color>
+    <!-- ダークモード時の Window 背景（Color.kt の backgroundDark と同じ値） -->
+    <color name="window_background_dark">#FF12140D</color>
 </resources>

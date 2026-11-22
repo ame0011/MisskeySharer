@@ -1,5 +1,6 @@
 package com.amesingularity.misskeysharer.ui
 import android.app.Activity
+import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.ColorScheme
@@ -311,6 +312,17 @@ fun AppTheme(
       
       darkTheme -> darkScheme
       else -> lightScheme
+  }
+
+  // Compose の配色と Window 背景を同期させる。
+  // NavHost の既定遷移はクロスフェードのため、両画面が半透明になった隙間に
+  // Window 背景が露出する。ライト背景のままだとダークモード時に一瞬白く見える。
+  val context = LocalContext.current
+  DisposableEffect(context, colorScheme.background) {
+      (context as? Activity)?.window?.setBackgroundDrawable(
+          ColorDrawable(colorScheme.background.toArgb())
+      )
+      onDispose {}
   }
 
   MaterialTheme(
