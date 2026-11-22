@@ -72,88 +72,94 @@ fun AboutScreen(onBack: () -> Unit) {
             )
         }
     ) { padding ->
-        Column(
+        // カードとタイトルも LazyColumn のアイテムとして描画し、トップバー以外を全てスクロール可能にする
+        LibrariesContainer(
+            libraries = libraries,
             modifier = Modifier
                 .padding(padding)
                 .fillMaxSize(),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            Card(modifier = Modifier.padding(horizontal = 16.dp).fillMaxWidth()) {
-                Column(
-                    modifier = Modifier.padding(16.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    Text(
-                        stringResource(R.string.app_name),
-                        style = MaterialTheme.typography.titleLarge,
-                        fontWeight = FontWeight.Bold
-                    )
-                    versionName?.let {
-                        Text(
-                            stringResource(R.string.about_version, it),
-                            style = MaterialTheme.typography.bodySmall
-                        )
-                    }
-                    Text(
-                        stringResource(R.string.about_license_title),
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Text(
-                        stringResource(R.string.about_license_text),
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                    // カード最下部のリポジトリとライセンスのボタン
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(0.dp)
+            header = {
+                item {
+                    Card(
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp)
+                            .fillMaxWidth()
+                            .padding(bottom = 12.dp)
                     ) {
-                        TextButton(
-                            onClick = { openUrl(repositoryUrl) },
-                            modifier = Modifier.weight(1f),
-                            shape = RoundedCornerShape(
-                                topStart = 12.dp,
-                                bottomStart = 12.dp,
-                                topEnd = 0.dp,
-                                bottomEnd = 0.dp
-                            )
+                        Column(
+                            modifier = Modifier.padding(16.dp),
+                            verticalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
                             Text(
-                                text = stringResource(R.string.about_repository),
-                                textAlign = TextAlign.Center
+                                stringResource(R.string.app_name),
+                                style = MaterialTheme.typography.titleLarge,
+                                fontWeight = FontWeight.Bold
                             )
-                        }
-                        TextButton(
-                            onClick = { openUrl(licenseUrl) },
-                            modifier = Modifier.weight(1f),
-                            shape = RoundedCornerShape(
-                                topStart = 0.dp,
-                                bottomStart = 0.dp,
-                                topEnd = 12.dp,
-                                bottomEnd = 12.dp
-                            )
-                        ) {
+                            versionName?.let {
+                                Text(
+                                    stringResource(R.string.about_version, it),
+                                    style = MaterialTheme.typography.bodySmall
+                                )
+                            }
                             Text(
-                                text = stringResource(R.string.about_license_link),
-                                textAlign = TextAlign.Center
+                                stringResource(R.string.about_license_title),
+                                style = MaterialTheme.typography.titleMedium,
+                                fontWeight = FontWeight.Bold
                             )
+                            Text(
+                                stringResource(R.string.about_license_text),
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                            // カード最下部のリポジトリとライセンスのボタン
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.spacedBy(0.dp)
+                            ) {
+                                TextButton(
+                                    onClick = { openUrl(repositoryUrl) },
+                                    modifier = Modifier.weight(1f),
+                                    shape = RoundedCornerShape(
+                                        topStart = 12.dp,
+                                        bottomStart = 12.dp,
+                                        topEnd = 0.dp,
+                                        bottomEnd = 0.dp
+                                    )
+                                ) {
+                                    Text(
+                                        text = stringResource(R.string.about_repository),
+                                        textAlign = TextAlign.Center
+                                    )
+                                }
+                                TextButton(
+                                    onClick = { openUrl(licenseUrl) },
+                                    modifier = Modifier.weight(1f),
+                                    shape = RoundedCornerShape(
+                                        topStart = 0.dp,
+                                        bottomStart = 0.dp,
+                                        topEnd = 12.dp,
+                                        bottomEnd = 12.dp
+                                    )
+                                ) {
+                                    Text(
+                                        text = stringResource(R.string.about_license_link),
+                                        textAlign = TextAlign.Center
+                                    )
+                                }
+                            }
                         }
                     }
                 }
+                item {
+                    Text(
+                        stringResource(R.string.about_oss_title),
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp)
+                            .padding(bottom = 12.dp)
+                    )
+                }
             }
-
-            Text(
-                stringResource(R.string.about_oss_title),
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(horizontal = 16.dp)
-            )
-            LibrariesContainer(
-                libraries = libraries,
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxWidth()
-            )
-        }
+        )
     }
 }
