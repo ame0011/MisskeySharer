@@ -3,6 +3,8 @@ package com.amesingularity.misskeysharer
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.content.edit
+import java.net.Inet6Address
+import java.net.InetAddress
 import java.net.URL
 
 /** 連携済みのMisskeyアカウント情報 */
@@ -127,22 +129,62 @@ object Prefs {
         return s.trimEnd('/')
     }
 
+    private val hostLabelRegex = Regex("^[A-Za-z0-9]([A-Za-z0-9-]*[A-Za-z0-9])?$")
+
+    /**
+     * http/https 以外のスキームが付いた入力かどうかを判定する。
+     * 正規化後に末尾スラッシュが除去されると "ftp://" が "https://ftp:/" になり
+     * 有効なホストとして通ってしまうため、正規化前にチェックする。
+     * "localhost:3000" のような host:port はコロン直後が数字なのでスキーム扱いしない。
+     */
+    private fun hasUnsupportedScheme(raw: String): Boolean {
+        val colon = raw.indexOf(':')
+        if (colon <= 0) return false
+        val candidate = raw.substring(0, colon)
+        if (!candidate.first().isLetter()) return false
+        if (candidate.any { !it.isLetterOrDigit() && it !in "+-." }) return false
+        if (colon + 1 < raw.length && raw[colon + 1].isDigit()) return false
+        return !candidate.equals("http", ignoreCase = true) &&
+            !candidate.equals("https", ignoreCase = true)
+    }
+
+    /** ASCII のホスト名、または IPv6 リテラルかどうかを判定する */
+    private fun isValidHost(host: String): Boolean {
+        if (host.isEmpty()) return false
+        if (host.startsWith("[") && host.endsWith("]")) {
+            val address = host.removePrefix("[").removeSuffix("]")
+            // IPv6 リテラルは必ず ':' を含む。これにより [example.com] などの
+            // ホスト名に対する DNS 参照をメインスレッドで行わないようにする。
+            if (!address.contains(':')) return false
+            return try {
+                InetAddress.getByName(address) is Inet6Address
+            } catch (e: Exception) {
+                false
+            }
+        }
+        return host.split('.').all { hostLabelRegex.matches(it) }
+    }
+
     /**
      * 認証に使えるインスタンスURLかどうかを判定する。
      * スキームとホストが必要。クエリ・フラグメント・ユーザー情報は
      * APIパスを連結するときに壊れるため拒否する。
      */
     fun isValidInstanceUrl(raw: String): Boolean {
-        val normalized = normalizeInstanceUrl(raw)
+        val trimmed = raw.trim()
+        if (trimmed.isEmpty()) return false
+        if (hasUnsupportedScheme(trimmed)) return false
+        // "ftp://example.com" のような入力を "https://ftp://example.com" にしない
+        if (trimmed.indexOf("://") != trimmed.lastIndexOf("://")) return false
+        val normalized = normalizeInstanceUrl(trimmed)
         if (normalized.isEmpty()) return false
-        // "ftp://example.com" のように別スキームが付いた入力は
-        // 正規化で "https://ftp://example.com" にならないよう拒否する
         if (normalized.indexOf("://") != normalized.lastIndexOf("://")) return false
         return try {
             val url = URL(normalized)
             (url.protocol.equals("http", ignoreCase = true) ||
                 url.protocol.equals("https", ignoreCase = true)) &&
-                url.host.isNotEmpty() &&
+                isValidHost(url.host) &&
+                (url.port == -1 || url.port in 1..65535) &&
                 url.query == null &&
                 url.ref == null &&
                 url.userInfo == null
