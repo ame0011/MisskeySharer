@@ -43,6 +43,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.amesingularity.misskeysharer.MisskeyClient
@@ -250,7 +251,10 @@ fun MainScreen(onAbout: () -> Unit = {}) {
                         }
                     }
 
-                    Row(verticalAlignment = Alignment.CenterVertically) {
+                    Row(
+                        modifier = Modifier.semantics(mergeDescendants = true) {},
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
                         Column(modifier = Modifier.weight(1f)) {
                             Text(stringResource(R.string.local_only_label), style = MaterialTheme.typography.bodyMedium)
                             Text(
@@ -307,7 +311,10 @@ fun MainScreen(onAbout: () -> Unit = {}) {
                         fontWeight = FontWeight.Bold
                     )
 
-                    Row(verticalAlignment = Alignment.CenterVertically) {
+                    Row(
+                        modifier = Modifier.semantics(mergeDescendants = true) {},
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
                         Column(modifier = Modifier.weight(1f)) {
                             Text(stringResource(R.string.pure_black_label), style = MaterialTheme.typography.bodyMedium)
                         }
