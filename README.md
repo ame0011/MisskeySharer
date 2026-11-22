@@ -6,7 +6,7 @@
     </a>
 </p>
 
-Androidの「共有」機能で受け取った文字列を、確認画面をはさんでMisskeyに投稿するミニアプリケーションです。
+Androidの「共有」機能で受け取った文字列を、確認画面をはさんでMisskeyに投稿するミニアプリケーションです。  
 Kotlin + Jetpack Composeで実装しています。
 
 ## 機能
@@ -32,7 +32,7 @@ Kotlin + Jetpack Composeで実装しています。
 - [x] 日本語
 - [x] 英語
 
-翻訳追加・修正など歓迎です！一部分だけでも大丈夫です
+翻訳追加・修正など歓迎です！一部分だけでも大丈夫です  
 `app/src/main/res/` 以下にリソースがあります。
 
 ## ビルド手順
@@ -45,7 +45,7 @@ Kotlin + Jetpack Composeで実装しています。
 
 ### コマンドライン
 
-[mise](https://mise.jdx.dev) に対応しています。
+[mise](https://mise.jdx.dev) に対応しています。  
 `mise install` でJDKをインストールし、`mise run <タスク名>` でタスクを実行できます。
 
 `mise tasks` で実行可能なタスクを一覧できます。
@@ -76,26 +76,38 @@ mise release
 2. **共有から投稿**: 任意のアプリでテキストを選択 → 「共有」→「Misskeyに投稿」を選択。
 3. **確認画面**: 内容を確認・編集し、公開範囲を選んで「投稿する」。「キャンセル」で破棄して元のアプリに戻ります。
 
-## しくみ（実装メモ）
+## 開発メモ
+
+### ファイル構成
 
 | ファイル | 役割 |
 |---|---|
-| `ShareActivity.kt` | `ACTION_SEND`（text/plain）の受信と投稿確認画面（Compose） |
-| `MainActivity.kt` | インスタンス連携・デフォルト公開範囲などの設定画面 |
-| `MiAuthCallbackActivity.kt` | `misskeysharer://miauth` ディープリンクで認証結果を受信 |
-| `MisskeyClient.kt` | MiAuth URL生成・`/api/miauth/<session>/check`・`/api/notes/create` 呼び出し（OkHttp） |
-| `Prefs.kt` | トークンや設定の保存（アプリ専用領域のSharedPreferences） |
-| `ui/Theme.kt` | テーマ定義。Android 12+ ではMaterial You（壁紙由来のダイナミックカラー）、それ以下ではMisskey風グリーンのカスタムテーマを適用 |
+| `ShareActivity.kt` | `ACTION_SEND`（`text/plain`）を受信。`EXTRA_SUBJECT`（タイトル）と `EXTRA_TEXT`（URL）を結合して共有確認画面へ渡す |
+| `MainActivity.kt` | 設定画面のエントリポイント。`MainScreen` / `AboutScreen` の遷移をNavigation Composeで管理 |
+| `MiAuthCallbackActivity.kt` | `misskeysharer://miauth` のリダイレクトを受け取る透過Activity。トークンを取得・保存して設定画面を開き終了する |
+| `MisskeyClient.kt` | MiAuth URL生成、`/api/miauth/<session>/check`、`/api/notes/create` の呼び出し（OkHttp）とAPIエラー解析 |
+| `Prefs.kt` | アカウント・認証保留セッション・デフォルト公開範囲・外観設定の保存（`MODE_PRIVATE` のSharedPreferences）。インスタンスURLの正規化／検証も担当 |
+| `Errors.kt` | 通信例外を、ローカライズ済み文言またはサーバー由来のメッセージに変換して表示用に返す |
+| `ui/ShareScreen.kt` | 共有確認画面。テキスト編集、Unicodeコードポイント数表示、公開範囲／ローカルのみの選択、投稿とエラー表示 |
+| `ui/MainScreen.kt` | 設定画面。アカウント連携、認証状況確認、デフォルト公開範囲、ピュアブラック切り替え |
+| `ui/AboutScreen.kt` | アプリ情報・バージョン・ライセンス・OSSライセンス一覧（AboutLibraries） |
+| `ui/Theme.kt` | `AppTheme`。Android 12+ はダイナミックカラー、以下はMisskey風グリーン。ピュアブラック適用とWindow背景の同期 |
+| `ui/Color.kt` | ライト／ダーク・各コントラストレベルの配色定義（`ui/Theme.kt` から参照） |
+| `ui/Type.kt` | `Typography` 定義（現在はMaterial 3のデフォルト） |
+| `AndroidManifest.xml` | ランチャー／共有ターゲット／MiAuthコールバックの3Activityとintent-filter、`INTERNET` 権限を宣言 |
+| `app/src/main/res/` | 文字列（日英）・テーマ・アイコンなどのリソース。`values` / `values-ja` で言語切り替え |
+| `app/src/test/` | 単体テスト（インスタンスURL検証、MiAuthレスポンス解析、APIエラー解析、リクエスト生成） |
+
+### 認証とトークン
 
 - **認証フロー**: UUIDセッションを生成 → `https://<instance>/miauth/<uuid>?name=...&permission=write:notes&callback=...` をブラウザで開く → 承認後にコールバックへリダイレクト → `POST /api/miauth/<session>/check` でトークン取得・保存。
-- **投稿**: `POST /api/notes/create` に `{"i": "<token>", "text": "...", "visibility": "home", "localOnly": true}` を送信。
 - **トークンの保存先**: アプリ専用ストレージ（他アプリから参照不可）。
 
-## カスタマイズ
+### カスタマイズ
 
 - **httpのセルフホストインスタンスに対応させる場合**: `AndroidManifest.xml` の `<application>` に `android:usesCleartextTraffic="true"` を追加（通信が平文になる点に注意）。
 
-## 制限と拡張アイデア
+### 制限と拡張アイデア
 
 - 対応する共有はテキスト（`text/plain`）のみ。画像添付や `ACTION_SEND_MULTIPLE` は未対応。
 - 共有シート上部に候補を出すDirectShare（Sharing Shortcuts）は未実装。
@@ -106,5 +118,5 @@ mise release
 
 - **ブラウザから戻ってこない**: インストールされていない古いブラウザや、リダイレクトをブロックする環境が原因のことがあります。設定画面の「認証状況を確認」で手動チェックできます。
 - **「まだ認証が完了していません」**: ブラウザ側で「許可する」を押す前に確認ボタンを押した場合に表示されます。
-- **投稿エラー（HTTP 400等）**: 文字数上限や空文字投稿の可能性があります。確認画面の文字数表示をチェックしてください。
+- **投稿エラー（HTTP 400等）**: 文字数上限の可能性があります。確認画面の文字数表示をチェックしてください。
 - **トークンを失効させたい**: Misskeyの設定 → アプリ連携 から削除できます。アプリ側は「連携を解除」でクリアされます。
