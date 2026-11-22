@@ -25,6 +25,7 @@ object Prefs {
     private const val KEY_PENDING_SESSION = "pending_session"
     private const val KEY_DEFAULT_VISIBILITY = "default_visibility"
     private const val KEY_DEFAULT_LOCAL_ONLY = "default_local_only"
+    private const val KEY_PURE_BLACK_MODE = "pure_black_mode"
 
     private fun p(context: Context): SharedPreferences =
         context.getSharedPreferences(FILE, Context.MODE_PRIVATE)
@@ -93,6 +94,24 @@ object Prefs {
 
     fun setDefaultLocalOnly(context: Context, value: Boolean) {
         p(context).edit { putBoolean(KEY_DEFAULT_LOCAL_ONLY, value) }
+    }
+
+    /** ピュアブラックモードの可否（ダークモード時のみ有効） */
+    fun pureBlackMode(context: Context): Boolean =
+        p(context).getBoolean(KEY_PURE_BLACK_MODE, false)
+
+    fun setPureBlackMode(context: Context, value: Boolean) {
+        p(context).edit { putBoolean(KEY_PURE_BLACK_MODE, value) }
+    }
+
+    /** ピュアブラックモード変更のリスナーを登録し、解除関数を返す */
+    fun registerPureBlackModeListener(context: Context, onChange: () -> Unit): () -> Unit {
+        val prefs = p(context)
+        val listener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
+            if (key == KEY_PURE_BLACK_MODE) onChange()
+        }
+        prefs.registerOnSharedPreferenceChangeListener(listener)
+        return { prefs.unregisterOnSharedPreferenceChangeListener(listener) }
     }
 
     /** "misskey.io" のような入力を "https://misskey.io" に正規化する */

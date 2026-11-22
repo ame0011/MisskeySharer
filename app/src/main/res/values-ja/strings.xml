@@ -29,6 +29,10 @@
     <string name="howto_step2">2. 他のアプリで文字列を選んで「共有」→「Misskeyに投稿」を選びます。</string>
     <string name="howto_step3">3. 確認画面で内容と公開範囲を確かめて「投稿する」を押します。</string>
 
+    <!-- 外観 -->
+    <string name="appearance_title">外観</string>
+    <string name="pure_black_label">ダークモードではピュアブラック</string>
+
     <!-- About画面 -->
     <string name="about_button">このアプリについて</string>
     <string name="about_title">このアプリについて</string>

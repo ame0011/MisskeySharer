@@ -31,6 +31,10 @@
     <string name="howto_step2">2. Select text in another app, then choose \"Share\" → \"Post to Misskey\".</string>
     <string name="howto_step3">3. On the confirmation screen, check the text and visibility, then press \"Post\".</string>
 
+    <!-- 外観 -->
+    <string name="appearance_title">Appearance</string>
+    <string name="pure_black_label">Pure black in dark mode</string>
+
     <!-- About画面 -->
     <string name="about_button">About &amp; licenses</string>
     <string name="about_title">About</string>

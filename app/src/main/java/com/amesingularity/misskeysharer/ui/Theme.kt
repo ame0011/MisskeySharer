@@ -2,6 +2,7 @@ package com.amesingularity.misskeysharer.ui
 import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.material3.darkColorScheme
@@ -9,10 +10,16 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.Typography
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
+import com.amesingularity.misskeysharer.Prefs
 
 private val lightScheme = lightColorScheme(
     primary = primaryLight,
@@ -254,6 +261,32 @@ val unspecified_scheme = ColorFamily(
     Color.Unspecified, Color.Unspecified, Color.Unspecified, Color.Unspecified
 )
 
+/** ピュアブラック設定。SharedPreferences と同期するため、設定画面でトグルを切っても他のアクティビティに即座に反映される */
+@Composable
+private fun rememberPureBlackMode(): Boolean {
+    val context = LocalContext.current
+    var value by remember { mutableStateOf(Prefs.pureBlackMode(context)) }
+    DisposableEffect(context) {
+        val unregister = Prefs.registerPureBlackModeListener(context) {
+            value = Prefs.pureBlackMode(context)
+        }
+        onDispose { unregister() }
+    }
+    return value
+}
+
+/** 全surfaceを純黒にしたダークカラースキーム。surface系ロールのみ上書きし、アクセントカラー(ダイナミックカラー等)は維持する */
+private fun pureBlackDarkColorScheme(base: ColorScheme): ColorScheme = base.copy(
+    background = Color.Black,
+    surface = Color.Black,
+    surfaceDim = Color.Black,
+    surfaceContainerLowest = Color.Black,
+    surfaceContainerLow = Color.Black,
+    surfaceContainer = Color.Black,
+    surfaceContainerHigh = Color.Black,
+    surfaceContainerHighest = Color.Black
+)
+
 @Composable
 fun AppTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
@@ -261,7 +294,16 @@ fun AppTheme(
     dynamicColor: Boolean = true,
     content: @Composable() () -> Unit
 ) {
+  val pureBlack = rememberPureBlackMode()
+
   val colorScheme = when {
+      darkTheme && pureBlack -> {
+          val context = LocalContext.current
+          pureBlackDarkColorScheme(
+              if (dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) dynamicDarkColorScheme(context) else darkScheme
+          )
+      }
+
       dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
           val context = LocalContext.current
           if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)

@@ -67,6 +67,7 @@ fun MainScreen(onAbout: () -> Unit = {}) {
     var checking by remember { mutableStateOf(false) }
     var visibility by rememberSaveable { mutableStateOf(Prefs.defaultVisibility(context)) }
     var localOnly by rememberSaveable { mutableStateOf(Prefs.defaultLocalOnly(context)) }
+    var pureBlack by rememberSaveable { mutableStateOf(Prefs.pureBlackMode(context)) }
     var showClearConfirm by remember { mutableStateOf(false) }
 
     // 通知・エラー文言は合成中に取得しておく（locale 変更時に再計算され、LocaleContext の警告を回避）
@@ -291,6 +292,33 @@ fun MainScreen(onAbout: () -> Unit = {}) {
                         stringResource(R.string.howto_step3),
                         style = MaterialTheme.typography.bodyMedium
                     )
+                }
+            }
+
+            // ================= 外観 =================
+            Card(modifier = Modifier.fillMaxWidth()) {
+                Column(
+                    modifier = Modifier.padding(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    Text(
+                        stringResource(R.string.appearance_title),
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold
+                    )
+
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text(stringResource(R.string.pure_black_label), style = MaterialTheme.typography.bodyMedium)
+                        }
+                        Switch(
+                            checked = pureBlack,
+                            onCheckedChange = {
+                                pureBlack = it
+                                Prefs.setPureBlackMode(context, it)
+                            }
+                        )
+                    }
                 }
             }
 
