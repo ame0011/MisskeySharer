@@ -116,6 +116,10 @@ object MisskeyClient {
     /**
      * /api/notes/create でノートを投稿する。
      * 失敗時は MisskeyException。
+     *
+     * 成功レスポンスのボディは利用しないためパースしない。
+     * ここでパース失敗を例外にすると、サーバー側で投稿済みなのに失敗と表示され、
+     * 再投稿による重複の原因になる。
      */
     suspend fun createNote(
         instance: String,
@@ -123,7 +127,7 @@ object MisskeyClient {
         text: String,
         visibility: String,
         localOnly: Boolean
-    ): JSONObject = withContext(Dispatchers.IO) {
+    ) = withContext(Dispatchers.IO) {
         val payload = JSONObject().apply {
             put("i", token)
             put("text", text)
@@ -138,10 +142,8 @@ object MisskeyClient {
 
         try {
             http.newCall(request).execute().use { response ->
-                val body = response.body.string()
-                if (response.isSuccessful) {
-                    JSONObject(body)
-                } else {
+                if (!response.isSuccessful) {
+                    val body = response.body.string()
                     throw MisskeyException(parseApiError(body, response.code))
                 }
             }
