@@ -32,6 +32,7 @@
     <!-- About画面 -->
     <string name="about_button">このアプリについて</string>
     <string name="about_title">このアプリについて</string>
+    <string name="about_back">戻る</string>
     <string name="about_version">バージョン %1$s</string>
     <string name="about_repository">リポジトリ</string>
     <string name="about_license_title">このアプリのライセンス</string>

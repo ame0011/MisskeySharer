@@ -34,6 +34,7 @@
     <!-- About画面 -->
     <string name="about_button">About &amp; licenses</string>
     <string name="about_title">About</string>
+    <string name="about_back">Back</string>
     <string name="about_version">Version %1$s</string>
     <string name="about_repository">Source repository</string>
     <string name="about_repository_url" translatable="false">https://github.com/ame0011/MisskeySharer</string>
