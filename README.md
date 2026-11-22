@@ -27,6 +27,14 @@ Kotlin + Jetpack Composeで実装しています。
 | 開発環境 | Android Studio Koala Feature Drop (2024.1.2) 以降、Temurin JDK 25 |
 | Misskey | v12.75以上（MiAuth対応インスタンス） |
 
+## 🌏️対応言語
+
+- [x] 日本語
+- [x] 英語
+
+翻訳追加・修正など歓迎です！一部分だけでも大丈夫です
+`app/src/main/res/` 以下にリソースがあります。
+
 ## ビルド手順
 
 ### Android Studio
