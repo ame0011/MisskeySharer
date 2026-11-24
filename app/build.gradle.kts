@@ -69,6 +69,21 @@ android {
     buildFeatures {
         compose = true
     }
+
+    testOptions {
+        unitTests {
+            isIncludeAndroidResources = true
+        }
+    }
+}
+
+// Compose Preview は各ビルドバリアントでユニットテストが有効であることを要求する
+// （リソース APK に Android XML リソースやテーマをパッケージするため）。
+// AGP 9.x では release バリアントのユニットテストが既定で無効のため、明示的に有効化する。
+androidComponents {
+    beforeVariants(selector().withBuildType("release")) { variantBuilder ->
+        (variantBuilder as com.android.build.api.variant.HasUnitTestBuilder).enableUnitTest = true
+    }
 }
 
 dependencies {
