@@ -114,6 +114,36 @@ mise release
 - 文字数上限はMisskeyの標準実装で3000文字（Unicodeコードポイント）に固定されています。超過した場合はAPIのエラーをToastで表示します。
 - 拡張例: 複数アカウント切替、CW（注釈）入力、投稿履歴、投稿に失敗した下書きのキュー保存、DataStoreへの移行。
 
+### リリース方法
+
+新しいバージョンをリリースする方法
+
+1. CIと同じチェックを通す: `mise run check`
+2. `keystore.properties` が設定済みであることを確認
+3. `app/build.gradle.kts` の `versionName` と `versionCode` を更新
+   - `versionName`: semver の `MAJOR.MINOR.PATCH`。`feat` は MINOR、`fix` は PATCH、`BREAKING CHANGE` は MAJOR を上げる
+   - `versionCode`: 1つ繰り上げる
+4. `metadata/android/ja-JP/changelogs/<versionCode>.txt` と `metadata/android/en-US/changelogs/<versionCode>.txt` に変更履歴を書く
+5. 署名入りリリースビルドを実機で動作テスト: `mise run release-install`
+6. `chore(release): v<バージョン名>` としてコミットし、注釈付きタグを打つ: `git tag -a v<バージョン名> -m "v<バージョン名>"`
+7. ブランチとタグをPushする: `git push origin main && git push origin v<バージョン名>`
+8. CIが緑になったことを確認
+9. GitHubでタグ `v<バージョン名>` からリリースを作成する
+   - 署名入りAPK `app/build/outputs/apk/release/app-release.apk` を添付する
+   - 「Set as the latest release」にチェック
+   - 変更内容を日本語と英語の両方で書く
+
+#### 💡ヒント
+
+`git log "$(git describe --tags --abbrev=0)..HEAD" --oneline --no-merges`
+を実行することで前回のタグからHEADまでのコミットの一覧を出せます。
+CHANGELOGを書く際の参考にどうぞ。
+
+#### 注意点
+
+未署名APKは実機にインストールできません。
+Obtainiumが誤ってダウンロードしないように、リリースのアセットに未署名APKやデバッグAPKを添付してはいけません。
+
 ## トラブルシューティング
 
 - **ブラウザから戻ってこない**: インストールされていない古いブラウザや、リダイレクトをブロックする環境が原因のことがあります。設定画面の「認証状況を確認」で手動チェックできます。
