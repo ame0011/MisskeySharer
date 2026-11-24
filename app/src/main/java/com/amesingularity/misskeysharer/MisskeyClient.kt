@@ -88,7 +88,9 @@ object MisskeyClient {
     internal fun parseCheckResponse(code: Int, body: String): MiAuthResult {
         val json = try {
             JSONObject(body)
-        } catch (e: Exception) {
+        } catch (e: Throwable) {
+            // JSONException はもちろん、深層ネストJSONによる StackOverflowError も
+            // 「JSONでない」として通信異常・HTTPコード扱いに落とすため Throwable を捕捉する
             null
         }
 
@@ -157,7 +159,9 @@ object MisskeyClient {
     internal fun parseApiError(body: String, code: Int): String = try {
         val error = JSONObject(body).optJSONObject("error")
         error?.optString("message")?.takeIf { it.isNotEmpty() } ?: "HTTP $code"
-    } catch (e: Exception) {
+    } catch (e: Throwable) {
+        // JSONException はもちろん、深層ネストJSONによる StackOverflowError も
+        // HTTPコードにフォールバックするため Throwable を捕捉する
         "HTTP $code"
     }
 }
