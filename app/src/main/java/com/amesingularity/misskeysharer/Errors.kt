@@ -14,5 +14,5 @@ fun errorDetailForDisplay(context: Context, e: Throwable): String = when (e) {
         R.string.error_network,
         e.detail ?: context.getString(R.string.error_detail_unknown)
     )
-    else -> e.message ?: context.getString(R.string.error_unknown)
+    else -> e.message?.takeIf { it.isNotEmpty() } ?: context.getString(R.string.error_unknown)
 }
