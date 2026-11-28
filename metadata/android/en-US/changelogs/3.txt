@@ -1,0 +1,1 @@
+Removed the "About" text button from the settings screen; open it from the top bar icon instead.
