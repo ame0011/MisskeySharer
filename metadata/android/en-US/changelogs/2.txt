@@ -1,0 +1,15 @@
+New:
+- English UI; the app follows your device language.
+- "About" page with version, repo and licenses.
+- Pure black dark mode option.
+
+Improvements:
+- Stricter instance URL validation.
+- Clearer auth error messages.
+
+Fixes:
+- Successful posts could be shown as failed.
+- The text field no longer shrinks with the keyboard open.
+- Fixed a white flash in dark-mode transitions.
+- Deeply nested JSON no longer crashes the app.
+- Empty error messages no longer show a blank error.
