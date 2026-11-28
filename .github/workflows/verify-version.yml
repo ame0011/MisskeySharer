@@ -1,0 +1,35 @@
+name: Verify version
+
+on:
+  push:
+    tags: ["v*"]
+
+jobs:
+  verify-version:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Check tag name and versionCode
+        run: |
+          set -euo pipefail
+          tag="${GITHUB_REF_NAME#v}"
+          name=$(grep -oP 'versionName\s*=\s*"\K[^"]+' app/build.gradle.kts)
+          code=$(grep -oP 'versionCode\s*=\s*\K[0-9]+' app/build.gradle.kts)
+          echo "tag=$tag versionName=$name versionCode=$code"
+          if [ "$tag" != "$name" ]; then
+            echo "::error::タグ v$tag と versionName $name が一致しません"
+            exit 1
+          fi
+          prev=$(git tag --sort=-v:refname | grep -vx "v$tag" | head -n1 || true)
+          if [ -n "$prev" ]; then
+            prevcode=$(git show "$prev:app/build.gradle.kts" | grep -oP 'versionCode\s*=\s*\K[0-9]+')
+            echo "previous=$prev versionCode=$prevcode"
+            if [ "$code" -le "$prevcode" ]; then
+              echo "::error::versionCode $code が前回($prev)の $prevcode 以下です"
+              exit 1
+            fi
+          fi
